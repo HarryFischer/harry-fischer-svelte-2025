@@ -1,5 +1,17 @@
+@font-face {
+	font-family: "Guardian Cub Sans";
+	src:
+		url("/CubSans/GuardianCubSans-v7.woff2") format("woff2"),
+		url("/CubSans/GuardianCubSans-v7.woff") format("woff"),
+		url("/CubSans/GuardianCubSans-v7.otf") format("opentype");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
 :root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	font-family:
+		"Guardian Cub Sans", system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 

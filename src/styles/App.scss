@@ -1,10 +1,73 @@
-:global(body) {
+body {
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 }
 
-:global(.canvas-item) {
+.grid-container {
+	display: grid;
+	grid-template-columns: repeat(8, 350px);
+	grid-template-rows: repeat(6, 350px);
+	gap: 40px;
+	padding: 100px;
+}
+
+.grid-cell {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	&.empty {
+		// Empty cells remain empty
+	}
+	
+	&.center-text-cell {
+		grid-column: span 3;
+		grid-row: span 2;
+	}
+}
+
+.center-text {
+	text-align: center;
+	color: white;
+	z-index: 100;
+
+	h1,
+	p,
+	a {
+		font-size: 50px;
+		line-height: 1.1;
+	}
+
+	h1 {
+		font-weight: bold;
+		margin: 0;
+	}
+
+	p {
+		margin: 0;
+	}
+	a {
+		color: white;
+		transition: color 0.3s ease;
+		&:hover {
+			color: #ff6106;
+		}
+	}
+}
+
+.canvas-item {
+	width: 300px;
+	height: 300px;
+
+	span {
+		color: white;
+		font-size: 24px;
+		font-weight: bold;
+	}
+}
+
+.canvas-item {
 	display: flex;
 	align-items: center;
 	justify-content: center;

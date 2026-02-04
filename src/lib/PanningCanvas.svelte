@@ -48,6 +48,20 @@
 	};
 
 	onMount(() => {
+		// Initialize to center position
+		const windowWidth = window.innerWidth;
+		const windowHeight = window.innerHeight;
+		const worldWidth = canvasContainer.clientWidth;
+		const worldHeight = canvasContainer.clientHeight;
+		const panX = worldWidth - windowWidth;
+		const panY = worldHeight - windowHeight;
+
+		// Start at center (50% position)
+		currentX = panX * 0.5;
+		currentY = panY * 0.5;
+		aimX = currentX;
+		aimY = currentY;
+
 		animate();
 
 		const handleMouseMove = (event) => {

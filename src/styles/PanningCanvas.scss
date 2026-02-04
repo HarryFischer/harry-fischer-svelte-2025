@@ -4,17 +4,17 @@
 	overflow: hidden;
 	background: #000;
 	position: relative;
+	padding: 40px;
 }
 
 .panner-inner {
-	width: 4000px;
-	height: 3000px;
+	width: 300vw;
+	height: 200vh;
 	position: relative;
 	will-change: left, top;
 }
 
-:global(.canvas-item) {
-	position: absolute;
+.canvas-item {
 	width: 300px;
 	height: 300px;
 	border-radius: 8px;
