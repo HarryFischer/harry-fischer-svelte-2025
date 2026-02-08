@@ -6,7 +6,7 @@
 			id: 1,
 			backgroundColor: "#ffffff",
 			type: "video",
-			src: "/harry-fischer-svelte-2025/assets/agi-2035.mp4",
+			src: "/assets/agi-2035.mp4",
 			title: "AGI 2035",
 			url: "https://www.theguardian.com/technology/2024/nov/26/agi-2035-the-guardian-prediction-for-the-future-of-artificial-intelligence",
 		},
@@ -16,11 +16,11 @@
 			media: [
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/beside-2025.png",
+					src: "/assets/beside-2025.png",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/beside-2025.png",
+					src: "/assets/beside-2025.png",
 				},
 			],
 			title: "The Bedside Guardian 2025",
@@ -30,14 +30,14 @@
 			id: 3,
 			backgroundColor: "#606060",
 			type: "image",
-			src: "/harry-fischer-svelte-2025/assets/elections-1.jpg",
+			src: "/assets/elections-1.jpg",
 			title: "UK and US Elections 2024",
 		},
 		{
 			id: 4,
 			backgroundColor: "#dc2626",
 			type: "video",
-			src: "/harry-fischer-svelte-2025/assets/ukraine-skateboarding.mp4",
+			src: "/assets/ukraine-skateboarding.mp4",
 			title: "Ukraine Skateboarding",
 		},
 		{
@@ -46,23 +46,23 @@
 			media: [
 				{
 					type: "video",
-					src: "/harry-fischer-svelte-2025/assets/okinawa-1.mp4",
+					src: "/assets/okinawa-1.mp4",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/okinawa-2.png",
+					src: "/assets/okinawa-2.png",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/okinawa-3.png",
+					src: "/assets/okinawa-3.png",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/okinawa-4.png",
+					src: "/assets/okinawa-4.png",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/okinawa-5.png",
+					src: "/assets/okinawa-5.png",
 				},
 			],
 			title: "Okinawa: The bone hunter",
@@ -73,31 +73,31 @@
 			media: [
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/alex-1.jpg",
+					src: "/assets/alex-1.jpg",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/alex-2.jpg",
+					src: "/assets/alex-2.jpg",
 				},
 				{
 					type: "video",
-					src: "/harry-fischer-svelte-2025/assets/alex-3.mp4",
+					src: "/assets/alex-3.mp4",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/alex-4.jpg",
+					src: "/assets/alex-4.jpg",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/alex-5.jpg",
+					src: "/assets/alex-5.jpg",
 				},
 				{
 					type: "image",
-					src: "/harry-fischer-svelte-2025/assets/alex-6.jpg",
+					src: "/assets/alex-6.jpg",
 				},
 				{
 					type: "video",
-					src: "/harry-fischer-svelte-2025/assets/alex-7.mp4",
+					src: "/assets/alex-7.mp4",
 				},
 			],
 			title: "Alex Mourant website",
