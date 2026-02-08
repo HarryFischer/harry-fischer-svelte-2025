@@ -1,12 +1,16 @@
 <script>
 	import ScrollGallery from "./lib/ScrollGallery.svelte";
 
+	// Use Vite's BASE_URL to construct proper asset paths for GitHub Pages
+	const baseUrl = import.meta.env.BASE_URL;
+	const asset = (path) => `${baseUrl}assets/${path}`;
+
 	const items = [
 		{
 			id: 1,
 			backgroundColor: "#ffffff",
 			type: "video",
-			src: "/assets/agi-2035.mp4",
+			src: asset("agi-2035.mp4"),
 			title: "AGI 2035",
 			url: "https://www.theguardian.com/technology/2024/nov/26/agi-2035-the-guardian-prediction-for-the-future-of-artificial-intelligence",
 		},
@@ -16,11 +20,11 @@
 			media: [
 				{
 					type: "image",
-					src: "/assets/beside-2025.png",
+					src: asset("beside-2025.png"),
 				},
 				{
 					type: "image",
-					src: "/assets/beside-2025.png",
+					src: asset("beside-2025.png"),
 				},
 			],
 			title: "The Bedside Guardian 2025",
@@ -30,14 +34,14 @@
 			id: 3,
 			backgroundColor: "#606060",
 			type: "image",
-			src: "/assets/elections-1.jpg",
+			src: asset("elections-1.jpg"),
 			title: "UK and US Elections 2024",
 		},
 		{
 			id: 4,
 			backgroundColor: "#dc2626",
 			type: "video",
-			src: "/assets/ukraine-skateboarding.mp4",
+			src: asset("ukraine-skateboarding.mp4"),
 			title: "Ukraine Skateboarding",
 		},
 		{
@@ -46,23 +50,23 @@
 			media: [
 				{
 					type: "video",
-					src: "/assets/okinawa-1.mp4",
+					src: asset("okinawa-1.mp4"),
 				},
 				{
 					type: "image",
-					src: "/assets/okinawa-2.png",
+					src: asset("okinawa-2.png"),
 				},
 				{
 					type: "image",
-					src: "/assets/okinawa-3.png",
+					src: asset("okinawa-3.png"),
 				},
 				{
 					type: "image",
-					src: "/assets/okinawa-4.png",
+					src: asset("okinawa-4.png"),
 				},
 				{
 					type: "image",
-					src: "/assets/okinawa-5.png",
+					src: asset("okinawa-5.png"),
 				},
 			],
 			title: "Okinawa: The bone hunter",
@@ -73,31 +77,31 @@
 			media: [
 				{
 					type: "image",
-					src: "/assets/alex-1.jpg",
+					src: asset("alex-1.jpg"),
 				},
 				{
 					type: "image",
-					src: "/assets/alex-2.jpg",
+					src: asset("alex-2.jpg"),
 				},
 				{
 					type: "video",
-					src: "/assets/alex-3.mp4",
+					src: asset("alex-3.mp4"),
 				},
 				{
 					type: "image",
-					src: "/assets/alex-4.jpg",
+					src: asset("alex-4.jpg"),
 				},
 				{
 					type: "image",
-					src: "/assets/alex-5.jpg",
+					src: asset("alex-5.jpg"),
 				},
 				{
 					type: "image",
-					src: "/assets/alex-6.jpg",
+					src: asset("alex-6.jpg"),
 				},
 				{
 					type: "video",
-					src: "/assets/alex-7.mp4",
+					src: asset("alex-7.mp4"),
 				},
 			],
 			title: "Alex Mourant website",
