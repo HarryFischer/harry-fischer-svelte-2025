@@ -1,33 +1,112 @@
 <script>
-	import PanningCanvas from "./lib/PanningCanvas.svelte";
+	import ScrollGallery from "./lib/ScrollGallery.svelte";
 
-	const items = Array.from({ length: 35 }, (_, i) => ({
-		id: i + 1,
-		gradient: `linear-gradient(135deg, hsl(${(i * 12) % 360}, 70%, 60%) 0%, hsl(${(i * 12 + 30) % 360}, 70%, 50%) 100%)`,
-	}));
-
-	const getRandomPosition = (index) => {
-		const seed = index;
-		const random1 = Math.sin(seed * 12.9898) * 43758.5453;
-		const random2 = Math.sin((seed + 0.5) * 78.233) * 43758.5453;
-		const x = (random1 - Math.floor(random1)) * 3700;
-		const y = (random2 - Math.floor(random2)) * 2900;
-		return { x, y };
-	};
+	const items = [
+		{
+			id: 1,
+			backgroundColor: "#ffffff",
+			type: "video",
+			src: "/harry-fischer-svelte-2025/assets/agi-2035.mp4",
+			title: "AGI 2035",
+			url: "https://www.theguardian.com/technology/2024/nov/26/agi-2035-the-guardian-prediction-for-the-future-of-artificial-intelligence",
+		},
+		{
+			id: 2,
+			backgroundColor: "#ff5900",
+			media: [
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/beside-2025.png",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/beside-2025.png",
+				},
+			],
+			title: "The Bedside Guardian 2025",
+			url: "https://www.theguardian.com/environment/ng-interactive/2025/nov/26/beside-2025-a-glimpse-of-the-future-of-coastal-cities",
+		},
+		{
+			id: 3,
+			backgroundColor: "#606060",
+			type: "image",
+			src: "/harry-fischer-svelte-2025/assets/elections-1.jpg",
+			title: "UK and US Elections 2024",
+		},
+		{
+			id: 4,
+			backgroundColor: "#dc2626",
+			type: "video",
+			src: "/harry-fischer-svelte-2025/assets/ukraine-skateboarding.mp4",
+			title: "Ukraine Skateboarding",
+		},
+		{
+			id: 5,
+			backgroundColor: "#2C1C15",
+			media: [
+				{
+					type: "video",
+					src: "/harry-fischer-svelte-2025/assets/okinawa-1.mp4",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/okinawa-2.png",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/okinawa-3.png",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/okinawa-4.png",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/okinawa-5.png",
+				},
+			],
+			title: "Okinawa: The bone hunter",
+		},
+		{
+			id: 6,
+			backgroundColor: "#091BC5",
+			media: [
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/alex-1.jpg",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/alex-2.jpg",
+				},
+				{
+					type: "video",
+					src: "/harry-fischer-svelte-2025/assets/alex-3.mp4",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/alex-4.jpg",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/alex-5.jpg",
+				},
+				{
+					type: "image",
+					src: "/harry-fischer-svelte-2025/assets/alex-6.jpg",
+				},
+				{
+					type: "video",
+					src: "/harry-fischer-svelte-2025/assets/alex-7.mp4",
+				},
+			],
+			title: "Alex Mourant website",
+		},
+	];
 </script>
 
-<PanningCanvas>
-	{#each items as item, index (item.id)}
-		{@const pos = getRandomPosition(index)}
-		<div
-			class="canvas-item"
-			style="background: {item.gradient}; left: {pos.x}px; top: {pos.y}px;"
-		>
-			<span>Item {item.id}</span>
-		</div>
-	{/each}
-</PanningCanvas>
+<ScrollGallery {items} />
 
 <style lang="scss">
-	@import "./styles/main.scss";
+	@use "./styles/main.scss" as *;
 </style>
