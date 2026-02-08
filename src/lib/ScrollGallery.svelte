@@ -4,13 +4,140 @@
 	export let items = [];
 
 	let scrollContainer;
-	let backgroundColor = items[0]?.backgroundColor || "#000";
+	let backgroundColor = "#ffffff";
 	let visibleItems = new Set();
+	const carouselStates = new Map();
+	const carouselIndices = {};
+	const CAROUSEL_GAP = 16;
+	const CAROUSEL_WIDTH_RATIO = 0.82;
 
-	$: console.log("Visible items:", Array.from(visibleItems));
+	$: {
+		// Force reactivity for carousel indices
+		carouselIndices;
+	}
+
+	const getCarouselSlides = (media = []) => {
+		if (media.length <= 1) return media;
+		const first = media[0];
+		const last = media[media.length - 1];
+		return [last, ...media, first];
+	};
+
+	const applyCarouselTransform = (
+		state,
+		withTransition = true,
+		dragOffset = 0,
+	) => {
+		const baseOffset = (state.viewport.clientWidth - state.slideWidth) / 2;
+		const offset =
+			-state.index * (state.slideWidth + state.gap) + baseOffset + dragOffset;
+		state.track.style.transition = withTransition
+			? "transform 0.45s ease"
+			: "none";
+		state.track.style.transform = `translateX(${offset}px)`;
+
+		// Update reactive index for pagination
+		const realIndex = state.index - 1;
+		carouselIndices[state.id] =
+			realIndex >= 0 && realIndex < state.slides.length - 2 ? realIndex : 0;
+	};
+
+	const moveCarousel = (id, direction) => {
+		const state = carouselStates.get(id);
+		if (!state) return;
+		state.index += direction;
+		applyCarouselTransform(state, true);
+	};
+
+	const carousel = (node, { id, media }) => {
+		const viewport = node.querySelector(".carousel-viewport");
+		const track = node.querySelector(".carousel-track");
+		if (!viewport || !track) return {};
+
+		const slides = getCarouselSlides(media);
+		const state = {
+			id,
+			slides,
+			index: slides.length > 1 ? 1 : 0,
+			viewport,
+			track,
+			slideWidth: 0,
+			gap: CAROUSEL_GAP,
+			startX: 0,
+			currentX: 0,
+			isDragging: false,
+		};
+
+		carouselStates.set(id, state);
+
+		const updateSize = () => {
+			state.slideWidth = viewport.clientWidth * CAROUSEL_WIDTH_RATIO;
+			applyCarouselTransform(state, false);
+		};
+
+		const onTransitionEnd = () => {
+			if (state.slides.length <= 1) return;
+			if (state.index === 0) {
+				state.index = state.slides.length - 2;
+				applyCarouselTransform(state, false);
+			}
+			if (state.index === state.slides.length - 1) {
+				state.index = 1;
+				applyCarouselTransform(state, false);
+			}
+		};
+
+		const onPointerDown = (event) => {
+			state.isDragging = true;
+			state.startX = event.clientX;
+			state.currentX = event.clientX;
+			viewport.setPointerCapture(event.pointerId);
+		};
+
+		const onPointerMove = (event) => {
+			if (!state.isDragging) return;
+			state.currentX = event.clientX;
+			const delta = state.currentX - state.startX;
+			applyCarouselTransform(state, false, delta);
+		};
+
+		const onPointerUp = (event) => {
+			if (!state.isDragging) return;
+			state.isDragging = false;
+			viewport.releasePointerCapture(event.pointerId);
+			const delta = state.currentX - state.startX;
+			if (Math.abs(delta) > 50) {
+				moveCarousel(id, delta < 0 ? 1 : -1);
+			} else {
+				applyCarouselTransform(state, true);
+			}
+		};
+
+		const resizeObserver = new ResizeObserver(updateSize);
+		resizeObserver.observe(viewport);
+		updateSize();
+
+		track.addEventListener("transitionend", onTransitionEnd);
+		viewport.addEventListener("pointerdown", onPointerDown);
+		viewport.addEventListener("pointermove", onPointerMove);
+		viewport.addEventListener("pointerup", onPointerUp);
+		viewport.addEventListener("pointercancel", onPointerUp);
+
+		return {
+			destroy() {
+				resizeObserver.disconnect();
+				track.removeEventListener("transitionend", onTransitionEnd);
+				viewport.removeEventListener("pointerdown", onPointerDown);
+				viewport.removeEventListener("pointermove", onPointerMove);
+				viewport.removeEventListener("pointerup", onPointerUp);
+				viewport.removeEventListener("pointercancel", onPointerUp);
+				carouselStates.delete(id);
+			},
+		};
+	};
 
 	onMount(() => {
-		backgroundColor = items[0]?.backgroundColor || "#000";
+		backgroundColor = items[0]?.backgroundColor || "#ffffff";
 
 		// Use Intersection Observer to track which items are in view
 		const observer = new IntersectionObserver(
@@ -26,6 +153,14 @@
 						// Add CSS class directly to element
 						entry.target.classList.add("in-view");
 
+						// Play all videos (including those in carousels)
+						const videos = entry.target.querySelectorAll("video");
+						videos.forEach((video) => {
+							video.play().catch((err) => {
+								console.log("Video play failed:", err);
+							});
+						});
+
 						// Update background color when item comes into view
 						const item = items.find((i) => i.id === itemId);
 						if (item) {
@@ -38,6 +173,12 @@
 
 						// Remove CSS class
 						entry.target.classList.remove("in-view");
+
+						// Pause all videos (including those in carousels)
+						const videos = entry.target.querySelectorAll("video");
+						videos.forEach((video) => {
+							video.pause();
+						});
 					}
 				});
 			},
@@ -59,7 +200,37 @@
 
 <div class="gallery-wrapper" style="background-color: {backgroundColor}">
 	<div class="background-text">
-		<h1>Harry Fischer<br />Lead Designer & Developer</h1>
+		<div>
+			<h1>Harry Fischer</h1>
+			<!-- <span>&nbsp;</span> -->
+			<p>
+				is an award-winning lead designer and developer working across digital
+				design, art direction, and typography. My approach centers on
+				storytelling through authentic methods—creating work that feels real,
+				resonant and purposeful. I am currently based in London working with The
+				Guardian.
+				<!-- <a
+          href="https://www.theguardian.com/profile/harry-fischer"
+          target="_blank"
+          rel="noopener noreferrer">The Guardian</a
+        > -->
+			</p>
+		</div>
+		<div>
+			<small>Awards</small>
+			<small>
+				— <span>Cotton Capital,</span> The Guardian: D&AD, Wooden Pencil Magazine
+				design | Type Directors Club, Winner | ISTD, Cerificate of Excellence | Design
+				Week, Social Design Winner
+			</small>
+			<small>
+				— <span>UK and US Elections 2024,</span> The Guardian: D&AD, Wooden Pencil
+				| SND, Award of Excellence | SPD, Medal Finalist
+			</small>
+			<small>
+				— <span>The Black Panther Cubs,</span> The Guardian: Grierson, Long listed
+			</small>
+		</div>
 	</div>
 
 	<div class="scroll-container" bind:this={scrollContainer}>
@@ -67,11 +238,81 @@
 			<div class="gallery-item empty"></div>
 			{#each items as item, index (item.id)}
 				<div class="gallery-item" data-item-id={item.id}>
-					<div
-						class="item-content"
-						style="background-color: {item.backgroundColor}"
-					>
-						<span>{item.title}</span>
+					<div class="item-content">
+						{#if item.media && item.media.length > 1}
+							<div
+								class="carousel"
+								use:carousel={{ id: item.id, media: item.media }}
+							>
+								<button
+									class="carousel-arrow left"
+									type="button"
+									aria-label="Previous image"
+									on:click={() => moveCarousel(item.id, -1)}
+								>
+									←
+								</button>
+								<div class="carousel-viewport">
+									<div class="carousel-track">
+										{#each getCarouselSlides(item.media) as mediaItem, mediaIndex}
+											<div class="carousel-slide">
+												{#if mediaItem.type === "video"}
+													<video
+														src={mediaItem.src}
+														loop
+														muted
+														playsinline
+														preload="metadata"
+													></video>
+												{:else}
+													<img
+														loading="lazy"
+														src={mediaItem.src}
+														alt={`${item.title} ${mediaIndex + 1}`}
+													/>
+												{/if}
+											</div>
+										{/each}
+									</div>
+								</div>
+								<button
+									class="carousel-arrow right"
+									type="button"
+									aria-label="Next image"
+									on:click={() => moveCarousel(item.id, 1)}
+								>
+									→
+								</button>
+								<div class="carousel-pagination">
+									{#each item.media as _, dotIndex}
+										<button
+											class="carousel-dot"
+											class:active={carouselIndices[item.id] === dotIndex}
+											aria-label={`Go to slide ${dotIndex + 1}`}
+											on:click={() => {
+												const state = carouselStates.get(item.id);
+												if (state) {
+													state.index = dotIndex + 1;
+													applyCarouselTransform(state, true);
+												}
+											}}
+										></button>
+									{/each}
+								</div>
+							</div>
+						{:else if item.type === "video"}
+							<video src={item.src} loop muted playsinline preload="metadata"
+							></video>
+						{:else if item.type === "image"}
+							<img loading="lazy" src={item.src} alt={item.title} />
+						{:else}{/if}
+						{#if item.url}
+							<a href={item.url} target="_blank" rel="noopener noreferrer">
+								<h2>{item.title}</h2>
+							</a>
+						{:else}
+							<h2>{item.title}</h2>
+						{/if}
 					</div>
 				</div>
 			{/each}
@@ -80,123 +321,4 @@
 </div>
 
 <style lang="scss">
-	.gallery-wrapper {
-		width: 100vw;
-		height: 100vh;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		position: relative;
-		overflow: hidden;
-		transition: background-color 0.6s ease-out;
-	}
-
-	.background-text {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		text-align: center;
-		z-index: 0;
-		pointer-events: none;
-
-		h1 {
-			margin: 0;
-			font-size: clamp(2rem, 8vw, 6rem);
-			font-weight: 700;
-			color: rgba(255, 255, 255, 0.1);
-			line-height: 1.2;
-			white-space: nowrap;
-		}
-	}
-
-	.scroll-container {
-		width: 100%;
-		height: 100vh;
-		overflow-y: scroll;
-		overflow-x: hidden;
-		scroll-snap-type: y mandatory;
-		scroll-behavior: smooth;
-		position: relative;
-		z-index: 10;
-
-		// Custom scrollbar
-		&::-webkit-scrollbar {
-			width: 8px;
-		}
-
-		&::-webkit-scrollbar-track {
-			background: rgba(255, 255, 255, 0.05);
-		}
-
-		&::-webkit-scrollbar-thumb {
-			background: rgba(255, 255, 255, 0.2);
-			border-radius: 4px;
-
-			&:hover {
-				background: rgba(255, 255, 255, 0.3);
-			}
-		}
-	}
-
-	.scroll-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding: 100vh 0;
-		gap: 40px;
-	}
-
-	.gallery-item {
-		width: 100%;
-		height: 400px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		scroll-snap-align: center;
-		scroll-snap-stop: always;
-		transform: scale(0.5);
-		transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-
-		&.in-view {
-			transform: scale(1);
-			z-index: 5;
-		}
-	}
-
-	.item-content {
-		width: 90%;
-		max-width: 500px;
-		height: 100%;
-		border-radius: 16px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-		transition: box-shadow 0.4s ease;
-
-		span {
-			color: white;
-			font-size: 28px;
-			font-weight: bold;
-			text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-		}
-
-		img,
-		video {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			border-radius: 16px;
-		}
-	}
-
-	.gallery-item.active .item-content {
-		box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-	}
-
-	:global(.gallery-item.in-view) {
-		transform: scale(1);
-		z-index: 5;
-	}
 </style>
