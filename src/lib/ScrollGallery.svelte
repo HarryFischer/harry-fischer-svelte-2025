@@ -5,11 +5,12 @@
 
 	let scrollContainer;
 	let backgroundColor = "#ffffff";
+	let shouldBlurBackground = false;
 	let visibleItems = new Set();
 	const carouselStates = new Map();
 	const carouselIndices = {};
-	const CAROUSEL_GAP = 16;
-	const CAROUSEL_WIDTH_RATIO = 0.82;
+	const CAROUSEL_GAP = 8;
+	const CAROUSEL_WIDTH_RATIO = 0.8;
 
 	$: {
 		// Force reactivity for carousel indices
@@ -139,11 +140,22 @@
 	onMount(() => {
 		backgroundColor = items[0]?.backgroundColor || "#ffffff";
 
+		const scrollContent = scrollContainer?.querySelector(".scroll-content");
+		const firstScrollChild = scrollContent?.firstElementChild || null;
+		const lastScrollChild = scrollContent?.lastElementChild || null;
+		const carouselObservers = [];
+
+		// Determine if desktop based on screen width
+		const isDesktop = window.innerWidth > 980;
+
 		// Use Intersection Observer to track which items are in view
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
 					const itemId = parseInt(entry.target.dataset.itemId);
+					const isEdgeItem =
+						entry.target === firstScrollChild ||
+						entry.target === lastScrollChild;
 
 					if (entry.isIntersecting) {
 						// Add to visible items
@@ -153,18 +165,23 @@
 						// Add CSS class directly to element
 						entry.target.classList.add("in-view");
 
-						// Play all videos (including those in carousels)
+						// Play only non-carousel videos when the item is in view
 						const videos = entry.target.querySelectorAll("video");
 						videos.forEach((video) => {
+							if (video.closest(".carousel")) return;
 							video.play().catch((err) => {
 								console.log("Video play failed:", err);
 							});
 						});
 
 						// Update background color when item comes into view
-						const item = items.find((i) => i.id === itemId);
-						if (item) {
-							backgroundColor = item.backgroundColor;
+						if (isEdgeItem) {
+							backgroundColor = "#ffffff";
+						} else {
+							const item = items.find((i) => i.id === itemId);
+							if (item) {
+								backgroundColor = item.backgroundColor;
+							}
 						}
 					} else {
 						// Remove from visible items
@@ -183,8 +200,11 @@
 				});
 			},
 			{
-				threshold: 0.5, // Item must be 50% visible
-				rootMargin: "-100px 0px -100px 0px", // Trigger a bit earlier when scrolling down
+				// On desktop, use stricter settings to ensure only one element is in view at a time
+				threshold: isDesktop ? 0.8 : 0.5,
+				rootMargin: isDesktop
+					? "-200px 0px -200px 0px"
+					: "-100px 0px -100px 0px",
 			},
 		);
 
@@ -192,23 +212,67 @@
 		const itemElements = scrollContainer.querySelectorAll(".gallery-item");
 		itemElements.forEach((el) => observer.observe(el));
 
+		// Observe carousel videos within their viewports
+		const carouselViewports =
+			scrollContainer.querySelectorAll(".carousel-viewport");
+		carouselViewports.forEach((viewport) => {
+			const carouselObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						const video = entry.target;
+						const itemElement = video.closest(".gallery-item");
+						const itemId = itemElement
+							? parseInt(itemElement.dataset.itemId)
+							: null;
+						const itemVisible = itemId !== null && visibleItems.has(itemId);
+
+						if (entry.isIntersecting && itemVisible) {
+							video.play().catch((err) => {
+								console.log("Video play failed:", err);
+							});
+						} else {
+							video.pause();
+						}
+					});
+				},
+				{
+					root: viewport,
+					threshold: 0.6,
+				},
+			);
+
+			const carouselVideos = viewport.querySelectorAll("video");
+			carouselVideos.forEach((video) => carouselObserver.observe(video));
+			carouselObservers.push(carouselObserver);
+		});
+
 		return () => {
 			observer.disconnect();
+			carouselObservers.forEach((carouselObserver) => {
+				carouselObserver.disconnect();
+			});
 		};
 	});
 </script>
 
 <div class="gallery-wrapper" style="background-color: {backgroundColor}">
-	<div class="background-text">
+	<div
+		class="background-text"
+		style="filter: {shouldBlurBackground ? 'blur(1px)' : 'blur(0px)'}"
+	>
 		<div>
 			<h1>Harry Fischer</h1>
 			<!-- <span>&nbsp;</span> -->
 			<p>
-				is an award-winning lead designer and developer working across digital
-				design, art direction, and typography. My approach centers on
-				storytelling through authentic methods—creating work that feels real,
-				resonant and purposeful. I am currently based in London working with The
-				Guardian.
+				is a lead designer and developer working across digital design, art
+				direction, and typography. My approach centers on storytelling through
+				authentic methods—creating work that feels real, resonant and
+				purposeful. I am currently based in London working with The Guardian.
+				<a
+					href="https://www.instagram.com/harrryfischer"
+					target="_blank"
+					rel="noopener noreferrer">@harrryfischer</a
+				>
 				<!-- <a
           href="https://www.theguardian.com/profile/harry-fischer"
           target="_blank"
@@ -217,25 +281,26 @@
 			</p>
 		</div>
 		<div>
-			<small>Awards</small>
+			<small>Awards & recognition</small>
 			<small>
-				— <span>Cotton Capital,</span> The Guardian: D&AD, Wooden Pencil Magazine
-				design | Type Directors Club, Winner | ISTD, Cerificate of Excellence | Design
-				Week, Social Design Winner
+				<span>Cotton Capital,</span><br />The Guardian: D&AD, Wooden Pencil
+				Magazine design | Type Directors Club, Winner | ISTD, Cerificate of
+				Excellence | Design Week, Social Design Winner
 			</small>
 			<small>
-				— <span>UK and US Elections 2024,</span> The Guardian: D&AD, Wooden Pencil
-				| SND, Award of Excellence | SPD, Medal Finalist
+				<span>UK and US Elections 2024,</span><br />The Guardian: D&AD, Wooden
+				Pencil | SND, Award of Excellence | SPD, Medal Finalist
 			</small>
 			<small>
-				— <span>The Black Panther Cubs,</span> The Guardian: Grierson, Long listed
+				<span>The Black Panther Cubs,</span><br />The Guardian: Grierson, Long
+				listed
 			</small>
 		</div>
 	</div>
 
 	<div class="scroll-container" bind:this={scrollContainer}>
 		<div class="scroll-content">
-			<div class="gallery-item empty"></div>
+			<div class="gallery-item empty" data-item-id="0"></div>
 			{#each items as item, index (item.id)}
 				<div class="gallery-item" data-item-id={item.id}>
 					<div class="item-content">
@@ -316,6 +381,7 @@
 					</div>
 				</div>
 			{/each}
+			<div class="gallery-item empty" data-item-id="-1"></div>
 		</div>
 	</div>
 </div>
