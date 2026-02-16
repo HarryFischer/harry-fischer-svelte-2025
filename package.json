@@ -13,5 +13,8 @@
     "sass-embedded": "^1.97.3",
     "svelte": "^5.43.8",
     "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "sass-mq": "^7.0.0"
   }
 }

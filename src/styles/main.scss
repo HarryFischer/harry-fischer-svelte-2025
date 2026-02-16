@@ -1,3 +1,6 @@
+// Import sass-mq for media queries
+@use "sass-mq" as mq;
+
 // Base styling
 
 :root {
@@ -94,10 +97,11 @@ button {
 	padding: 10px 12px 4px;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
 	height: calc(100vh - 20px);
+	transition: filter 0.4s ease-out;
 	> div:first-of-type {
 		max-width: 90%;
+		margin-bottom: 20px;
 	}
 	h1,
 	p,
@@ -107,7 +111,7 @@ button {
 		margin: 0;
 		font-size: clamp(1rem, 4vw, 3rem);
 		font-size: 24px;
-		line-height: 110%;
+		line-height: 125%;
 		color: black;
 	}
 	h1 {
@@ -123,7 +127,6 @@ button {
 	}
 	small {
 		font-size: 14px;
-		line-height: 115%;
 		display: block;
 		span {
 			// color: var(--orange);
@@ -164,6 +167,7 @@ button {
 		flex-direction: column;
 		align-items: center;
 		padding: 40vh 0 100vh 0;
+		padding: 15vh 0 100vh 0;
 		gap: 20px;
 		.gallery-item {
 			width: 100%;
@@ -175,6 +179,18 @@ button {
 			scroll-snap-stop: always;
 			&.empty {
 				pointer-events: none;
+			}
+
+			&.in-view {
+				.item-content {
+					h2 {
+						opacity: 1;
+						scale: 1;
+					}
+					.carousel-pagination {
+						opacity: 1;
+					}
+				}
 			}
 
 			// &:not(.in-view) {
@@ -194,32 +210,45 @@ button {
 				/* box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); */
 				/* transition: box-shadow 0.4s ease; */
 
+				h2 {
+					max-width: 80vw;
+					text-align: center;
+				}
+
 				.carousel {
 					position: relative;
 					width: 100%;
 				}
 
 				.carousel-viewport {
-					overflow: hidden;
-					width: 100%;
+					// overflow: hidden;
+					width: 100vw;
 					touch-action: pan-y;
 				}
 
 				.carousel-track {
 					display: flex;
-					gap: 16px;
+					gap: 8px;
 					will-change: transform;
+					align-items: center;
 				}
 
 				.carousel-slide {
-					flex: 0 0 82%;
+					flex: 0 0 80%;
 					overflow: hidden;
+					display: flex;
+
+					@include mq.mq($from: desktop) {
+						flex: 0 0 50%;
+					}
 
 					img,
 					video {
 						width: 100%;
 						height: auto;
-						object-fit: cover;
+						width: 100%;
+						height: 60vh;
+						object-fit: contain;
 					}
 				}
 
@@ -252,6 +281,8 @@ button {
 					justify-content: center;
 					gap: 8px;
 					margin-top: 12px;
+					opacity: 0;
+					transition: opacity 0.3s ease;
 				}
 
 				.carousel-dot {
@@ -259,7 +290,7 @@ button {
 					height: 8px;
 					border-radius: 50%;
 					border: none;
-					background: rgba(255, 255, 255, 0.4);
+					background: rgba(0, 0, 0, 0.6);
 					cursor: pointer;
 					padding: 0;
 					transition:
@@ -267,11 +298,11 @@ button {
 						transform 0.3s ease;
 
 					&:hover {
-						background: rgba(255, 255, 255, 0.6);
+						background: rgba(0, 0, 0, 0.8);
 					}
 
 					&.active {
-						background: rgba(255, 255, 255, 1);
+						background: rgba(0, 0, 0, 1);
 						transform: scale(1.2);
 					}
 				}
@@ -290,12 +321,17 @@ button {
 				}
 				h2 {
 					color: white;
-					background-color: #12121290;
+					background-color: rgba(0, 0, 0, 0.6);
 					margin: 8px 0 0 0;
 					border-radius: 20px;
 					width: max-content;
 					padding: 2px 20px 3px;
 					font-size: 14px;
+					opacity: 0;
+					scale: 0.8;
+					transition:
+						opacity 0.25s ease,
+						transform 0.25s ease;
 				}
 
 				span {

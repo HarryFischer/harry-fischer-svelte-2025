@@ -1,4 +1,5 @@
 <script>
+	import { backIn } from "svelte/easing";
 	import ScrollGallery from "./lib/ScrollGallery.svelte";
 
 	// Use Vite's BASE_URL to construct proper asset paths for GitHub Pages
@@ -8,7 +9,7 @@
 	const items = [
 		{
 			id: 1,
-			backgroundColor: "#ffffff",
+			backgroundColor: "#FFED48",
 			type: "video",
 			src: asset("agi-2035.mp4"),
 			title: "AGI 2035",
@@ -20,11 +21,15 @@
 			media: [
 				{
 					type: "image",
-					src: asset("beside-2025.png"),
+					src: asset("bedside-cover.png"),
 				},
 				{
 					type: "image",
-					src: asset("beside-2025.png"),
+					src: asset("bedside-back.png"),
+				},
+				{
+					type: "image",
+					src: asset("bedside-3.jpg"),
 				},
 			],
 			title: "The Bedside Guardian 2025",
@@ -32,20 +37,47 @@
 		},
 		{
 			id: 3,
+			backgroundColor: "#3399FF",
+			media: [
+				{
+					type: "image",
+					src: asset("cubs-0.jpg"),
+				},
+				{
+					type: "video",
+					src: asset("cubs-titles.mp4"),
+				},
+				{
+					type: "video",
+					src: asset("cubs-credits.mp4"),
+				},
+				{
+					type: "image",
+					src: asset("Cubs-1.png"),
+				},
+				{
+					type: "image",
+					src: asset("cubs-poster.jpg"),
+				},
+			],
+			title: "The Black Panther Cubs — When The Revolution Doesn't Come",
+		},
+		{
+			id: 4,
 			backgroundColor: "#606060",
 			type: "image",
 			src: asset("elections-1.jpg"),
 			title: "UK and US Elections 2024",
 		},
 		{
-			id: 4,
+			id: 5,
 			backgroundColor: "#dc2626",
 			type: "video",
 			src: asset("ukraine-skateboarding.mp4"),
 			title: "Ukraine Skateboarding",
 		},
 		{
-			id: 5,
+			id: 6,
 			backgroundColor: "#2C1C15",
 			media: [
 				{
@@ -72,7 +104,7 @@
 			title: "Okinawa: The bone hunter",
 		},
 		{
-			id: 6,
+			id: 7,
 			backgroundColor: "#091BC5",
 			media: [
 				{
@@ -105,6 +137,27 @@
 				},
 			],
 			title: "Alex Mourant website",
+		},
+		{
+			id: 8,
+			backgroundColor: "#2C2C26",
+			type: "video",
+			src: asset("press-vest.mp4"),
+			title: "The deadly toll on journalists in the Gaza war",
+		},
+		{
+			id: 9,
+			backgroundColor: "tomato",
+			type: "image",
+			src: asset("carbon-bombs-world.png"),
+			title: "Carbon bombs",
+		},
+		{
+			id: 10,
+			backgroundColor: "#2C2C26",
+			type: "image",
+			src: asset("fedrigoni-cal.jpg"),
+			title: "Fedrigoni Calendar 2025",
 		},
 	];
 </script>
