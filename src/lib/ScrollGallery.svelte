@@ -324,6 +324,7 @@
 												{#if mediaItem.type === "video"}
 													<video
 														src={mediaItem.src}
+														poster={mediaItem.poster}
 														loop
 														muted
 														playsinline
@@ -366,7 +367,13 @@
 								</div>
 							</div>
 						{:else if item.type === "video"}
-							<video src={item.src} loop muted playsinline preload="metadata"
+							<video
+								src={item.src}
+								poster={item.poster}
+								loop
+								muted
+								playsinline
+								preload="metadata"
 							></video>
 						{:else if item.type === "image"}
 							<img loading="lazy" src={item.src} alt={item.title} />

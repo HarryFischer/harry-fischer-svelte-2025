@@ -12,6 +12,7 @@
 			backgroundColor: "#FFED48",
 			type: "video",
 			src: asset("agi-2035.mp4"),
+			poster: asset("agi-2035-poster.jpg"),
 			title: "AGI 2035",
 			url: "https://www.theguardian.com/technology/2024/nov/26/agi-2035-the-guardian-prediction-for-the-future-of-artificial-intelligence",
 		},
@@ -46,10 +47,12 @@
 				{
 					type: "video",
 					src: asset("cubs-titles.mp4"),
+					poster: asset("cubs-titles-poster.jpg"),
 				},
 				{
 					type: "video",
 					src: asset("cubs-credits.mp4"),
+					poster: asset("cubs-credits-poster.jpg"),
 				},
 				{
 					type: "image",
@@ -74,6 +77,7 @@
 			backgroundColor: "#dc2626",
 			type: "video",
 			src: asset("ukraine-skateboarding.mp4"),
+			poster: asset("ukraine-skateboarding-poster.jpg"),
 			title: "Ukraine Skateboarding",
 		},
 		{
@@ -83,6 +87,7 @@
 				{
 					type: "video",
 					src: asset("okinawa-1.mp4"),
+					poster: asset("okinawa-1-poster.jpg"),
 				},
 				{
 					type: "image",
@@ -118,6 +123,7 @@
 				{
 					type: "video",
 					src: asset("alex-3.mp4"),
+					poster: asset("alex-3-poster.jpg"),
 				},
 				{
 					type: "image",
@@ -134,6 +140,7 @@
 				{
 					type: "video",
 					src: asset("alex-7.mp4"),
+					poster: asset("alex-7-poster.jpg"),
 				},
 			],
 			title: "Alex Mourant website",
@@ -143,6 +150,7 @@
 			backgroundColor: "#2C2C26",
 			type: "video",
 			src: asset("press-vest.mp4"),
+			poster: asset("press-vest-poster.jpg"),
 			title: "The deadly toll on journalists in the Gaza war",
 		},
 		{
