@@ -4,7 +4,7 @@
 // Base styling
 
 :root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	font-family: "Archivo", Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 
@@ -82,7 +82,7 @@ button {
 	justify-content: center;
 	position: relative;
 	overflow: hidden;
-	transition: background-color 0.6s ease-out;
+	background-color: var(--bg-color, #ffffff);
 }
 
 .background-text {
@@ -95,12 +95,14 @@ button {
 	pointer-events: none;
 	width: calc(100% - 24px);
 	padding: 10px 12px 4px;
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	gap: 10px;
 	height: calc(100vh - 20px);
 	transition: filter 0.4s ease-out;
 	> div:first-of-type {
-		max-width: 90%;
+		grid-column: span 7;
+		max-width: 100%;
 		margin-bottom: 20px;
 	}
 	h1,
@@ -361,5 +363,151 @@ button {
 				box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 			}
 		}
+	}
+}
+
+// ScrollGallery Component Styles
+.info-button {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	padding: 0;
+	width: 39px;
+	height: 39px;
+	border-radius: 50%;
+	background: #000;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100;
+
+	.plus-icon {
+		position: relative;
+		width: 24px;
+		height: 24px;
+
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+			background: #fff;
+		}
+
+		&::before {
+			width: 2px;
+			height: 24px;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		&::after {
+			width: 24px;
+			height: 2px;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+}
+
+.info-overlay {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	width: 50px;
+	height: 50px;
+	background: #000;
+	border-radius: 50%;
+	z-index: 99;
+	// pointer-events: none;
+	// overflow-y: auto;
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	gap: 10px;
+	padding: 10px;
+}
+
+button:focus,
+button:focus-visible {
+	outline: none !important;
+}
+
+.overlay-content {
+	// position: absolute;
+	// top: 50%;
+	// left: 50%;
+	// transform: translate(-50%, -50%);
+	width: 90%;
+	max-width: 600px;
+	color: #fff;
+	opacity: 0;
+	grid-column: span 7;
+
+	p {
+		font-size: 1.1rem;
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.contact-box {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 10px 10px 20px;
+	pointer-events: none;
+	z-index: 50;
+	background: linear-gradient(to bottom, transparent 0%, var(--bg-color) 35%);
+
+	.contact-content {
+		pointer-events: auto;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 10px;
+		align-items: center;
+	}
+}
+
+.contact-label {
+	font-size: 0.875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.contact-email {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 1rem;
+	cursor: pointer;
+	text-decoration: none;
+	position: relative;
+	transition: opacity 0.2s;
+	font-family: inherit;
+	display: inline-block;
+	text-align: left;
+
+	&:hover {
+		opacity: 0.7;
+	}
+}
+
+.contact-instagram {
+	text-decoration: none;
+	font-size: 1rem;
+	transition: opacity 0.2s;
+
+	&:hover {
+		opacity: 0.7;
 	}
 }

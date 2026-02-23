@@ -10,6 +10,7 @@
 		{
 			id: 1,
 			backgroundColor: "#FFED48",
+			textColor: "#000",
 			type: "video",
 			src: asset("agi-2035.mp4"),
 			poster: asset("agi-2035-poster.jpg"),
@@ -19,6 +20,7 @@
 		{
 			id: 2,
 			backgroundColor: "#ff5900",
+			textColor: "#fff",
 			media: [
 				{
 					type: "image",
@@ -39,6 +41,7 @@
 		{
 			id: 3,
 			backgroundColor: "#3399FF",
+			textColor: "#fff",
 			media: [
 				{
 					type: "image",
@@ -68,6 +71,7 @@
 		{
 			id: 4,
 			backgroundColor: "#606060",
+			textColor: "#fff",
 			type: "image",
 			src: asset("elections-1.jpg"),
 			title: "UK and US Elections 2024",
@@ -75,6 +79,7 @@
 		{
 			id: 5,
 			backgroundColor: "#dc2626",
+			textColor: "#fff",
 			type: "video",
 			src: asset("ukraine-skateboarding.mp4"),
 			poster: asset("ukraine-skateboarding-poster.jpg"),
@@ -83,6 +88,7 @@
 		{
 			id: 6,
 			backgroundColor: "#2C1C15",
+			textColor: "#fff",
 			media: [
 				{
 					type: "video",
@@ -111,6 +117,7 @@
 		{
 			id: 7,
 			backgroundColor: "#091BC5",
+			textColor: "#fff",
 			media: [
 				{
 					type: "image",
@@ -148,6 +155,7 @@
 		{
 			id: 8,
 			backgroundColor: "#2C2C26",
+			textColor: "#fff",
 			type: "video",
 			src: asset("press-vest.mp4"),
 			poster: asset("press-vest-poster.jpg"),
@@ -156,6 +164,7 @@
 		{
 			id: 9,
 			backgroundColor: "tomato",
+			textColor: "#fff",
 			type: "image",
 			src: asset("carbon-bombs-world.png"),
 			title: "Carbon bombs",
@@ -163,6 +172,7 @@
 		{
 			id: 10,
 			backgroundColor: "#2C2C26",
+			textColor: "#fff",
 			type: "image",
 			src: asset("fedrigoni-cal.jpg"),
 			title: "Fedrigoni Calendar 2025",
