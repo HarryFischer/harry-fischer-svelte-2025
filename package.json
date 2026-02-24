@@ -1,20 +1,22 @@
 {
-  "name": "harry-fischer-svelte-2025",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^6.2.1",
-    "sass-embedded": "^1.97.3",
-    "svelte": "^5.43.8",
-    "vite": "^7.2.4"
-  },
-  "dependencies": {
-    "sass-mq": "^7.0.0"
-  }
+	"name": "harry-fischer-svelte-2025",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"generate-posters": "node scripts/generate-posters.js"
+	},
+	"devDependencies": {
+		"@sveltejs/vite-plugin-svelte": "^6.2.1",
+		"sass-embedded": "^1.97.3",
+		"svelte": "^5.43.8",
+		"vite": "^7.2.4"
+	},
+	"dependencies": {
+		"gsap": "^3.14.2",
+		"sass-mq": "^7.0.0"
+	}
 }
