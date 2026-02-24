@@ -80,7 +80,7 @@
 			// Open animation
 			infoOverlayOpen = true;
 			gsap.to(infoOverlay, {
-				width: "calc(100vw - 20px)",
+				width: "calc(100vw - 24px)",
 				height: "100vh",
 				borderRadius: 0,
 				top: 0,
@@ -162,7 +162,7 @@
 		if (!state) return;
 		state.index += direction;
 		applyCarouselTransform(state, true);
-		
+
 		// Pause all carousel videos and play only the visible one
 		const carouselNode = document.querySelector(`[data-carousel-id="${id}"]`);
 		if (carouselNode) {
@@ -313,7 +313,7 @@
 								console.log("Video play failed:", err);
 							});
 						});
-						
+
 						// For carousel videos, play the currently visible one
 						const carousel = entry.target.querySelector(".carousel");
 						if (carousel) {
@@ -376,7 +376,7 @@
 		carouselViewports.forEach((viewport) => {
 			const carouselNode = viewport.closest(".carousel");
 			const carouselId = carouselNode?.getAttribute("data-carousel-id");
-			
+
 			const carouselObserver = new IntersectionObserver(
 				(entries) => {
 					entries.forEach((entry) => {
@@ -586,7 +586,7 @@
 	<div class="contact-box">
 		<div class="contact-content">
 			<div class="contact-label" style="color: var(--text-color)">
-				Open to comissions
+				Get in touch — open to comissions
 			</div>
 			<button
 				bind:this={contactEmailButton}

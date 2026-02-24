@@ -1,22 +1,15 @@
 <script>
-	import { backIn } from "svelte/easing";
+	import { onMount } from "svelte";
 	import ScrollGallery from "./lib/ScrollGallery.svelte";
+
+	let isLoading = true;
+	let isFading = false;
 
 	// Use Vite's BASE_URL to construct proper asset paths for GitHub Pages
 	const baseUrl = import.meta.env.BASE_URL;
 	const asset = (path) => `${baseUrl}assets/${path}`;
 
 	const items = [
-		{
-			id: 1,
-			backgroundColor: "#FFED48",
-			textColor: "#000",
-			type: "video",
-			src: asset("agi-2035.mp4"),
-			poster: asset("agi-2035-poster.jpg"),
-			title: "AGI 2035",
-			url: "https://www.theguardian.com/technology/2024/nov/26/agi-2035-the-guardian-prediction-for-the-future-of-artificial-intelligence",
-		},
 		{
 			id: 2,
 			backgroundColor: "#ff5900",
@@ -69,12 +62,106 @@
 			title: "The Black Panther Cubs — When The Revolution Doesn't Come",
 		},
 		{
-			id: 4,
-			backgroundColor: "#606060",
+			id: 11,
+			backgroundColor: "#2C2C26",
 			textColor: "#fff",
-			type: "image",
-			src: asset("elections-1.jpg"),
-			title: "UK and US Elections 2024",
+			media: [
+				{
+					type: "video",
+					src: asset("cub-sans-vid.mp4"),
+				},
+				{
+					type: "image",
+					src: asset("cub-sans-char-1.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("cub-sans-char-2.jpg"),
+				},
+				{
+					type: "video",
+					src: asset("cub-sans-website.mp4"),
+				},
+			],
+			title: "Guardian Cub Sans",
+		},
+		{
+			id: 4,
+			backgroundColor: "#2B503C",
+			textColor: "#fff",
+			media: [
+				{
+					type: "image",
+					src: asset("elec-artwork-1.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("elec-artwork-2.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("elec-artwork-3.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("elec-artwork-4.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("elec-artwork-5.jpg"),
+				},
+			],
+			title: "UK and US Elections artwork",
+		},
+		{
+			id: 12,
+			backgroundColor: "#1a1a1a",
+			textColor: "#fff",
+			media: [
+				{
+					type: "image",
+					src: asset("election-1.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("election-2.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("election-3.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("election-4.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("election-5.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("election-6.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("election-7.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("election-8.jpg"),
+				},
+			],
+			title: "UK and US Elections UI",
+		},
+		{
+			id: 1,
+			backgroundColor: "#B7B7B7",
+			textColor: "#000",
+			type: "video",
+			src: asset("2035-agi.mp4"),
+			poster: asset("agi-2035-poster.jpg"),
+			title: "AGI 2035",
+			url: "https://www.theguardian.com/technology/2024/nov/26/agi-2035-the-guardian-prediction-for-the-future-of-artificial-intelligence",
 		},
 		{
 			id: 5,
@@ -178,7 +265,37 @@
 			title: "Fedrigoni Calendar 2025",
 		},
 	];
+
+	const finishLoading = () => {
+		if (!isLoading) return;
+		isFading = true;
+		setTimeout(() => {
+			isLoading = false;
+		}, 300);
+	};
+
+	onMount(() => {
+		if (document.readyState === "complete") {
+			finishLoading();
+			return;
+		}
+
+		const handleLoad = () => {
+			finishLoading();
+		};
+
+		window.addEventListener("load", handleLoad, { once: true });
+		return () => window.removeEventListener("load", handleLoad);
+	});
 </script>
+
+{#if isLoading}
+	<div class="loading-screen" class:is-fading={isFading} aria-live="polite">
+		<div class="loading-text">
+			Loading<span class="loading-dots" aria-hidden="true"></span>
+		</div>
+	</div>
+{/if}
 
 <ScrollGallery {items} />
 
