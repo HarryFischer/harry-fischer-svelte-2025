@@ -202,6 +202,7 @@ button {
 		.gallery-item {
 			width: 100%;
 			height: 400px;
+			height: 60vh;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -240,7 +241,7 @@ button {
 
 				.carousel {
 					position: relative;
-					width: 100%;
+					width: 100vw;
 				}
 
 				.carousel-viewport {
