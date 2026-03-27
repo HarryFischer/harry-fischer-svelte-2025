@@ -154,6 +154,22 @@
 			title: "UK and US Elections UI",
 		},
 		{
+			id: 13,
+			backgroundColor: "#1a1a1a",
+			textColor: "#fff",
+			media: [
+				{
+					type: "image",
+					src: asset("cc-cover.png"),
+				},
+				{
+					type: "image",
+					src: asset("cc-weave-close.jpg"),
+				},
+			],
+			title: "Cotton Capital — the weave",
+		},
+		{
 			id: 1,
 			backgroundColor: "#B7B7B7",
 			textColor: "#000",
@@ -260,8 +276,16 @@
 			id: 10,
 			backgroundColor: "#2C2C26",
 			textColor: "#fff",
-			type: "image",
-			src: asset("fedrigoni-cal.jpg"),
+			media: [
+				{
+					type: "image",
+					src: asset("fedrigoni-cal.jpg"),
+				},
+				{
+					type: "image",
+					src: asset("fedrigoni.jpg"),
+				},
+			],
 			title: "Fedrigoni Calendar 2025",
 		},
 	];
