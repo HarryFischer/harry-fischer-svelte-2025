@@ -15,6 +15,7 @@
 	let visibleItems = new Set();
 	let infoOverlayOpen = false;
 	let copiedEmail = false;
+	let isMobileViewport = false;
 	const carouselStates = new Map();
 	const carouselIndices = {};
 	const CAROUSEL_GAP = 8;
@@ -253,6 +254,13 @@
 	};
 
 	onMount(() => {
+		const viewportQuery = window.matchMedia("(max-width: 980px)");
+		const syncViewportMode = () => {
+			isMobileViewport = viewportQuery.matches;
+		};
+		syncViewportMode();
+		viewportQuery.addEventListener("change", syncViewportMode);
+
 		backgroundColor = items[0]?.backgroundColor || "#ffffff";
 		textColor = items[0]?.textColor || "#000";
 
@@ -410,6 +418,7 @@
 		});
 
 		return () => {
+			viewportQuery.removeEventListener("change", syncViewportMode);
 			observer.disconnect();
 			carouselObservers.forEach((carouselObserver) => {
 				carouselObserver.disconnect();
@@ -441,7 +450,9 @@
 
 	<div class="scroll-container" bind:this={scrollContainer}>
 		<div class="scroll-content">
-			<div class="gallery-item empty" data-item-id="0"></div>
+			{#if isMobileViewport}
+				<div class="gallery-item empty" data-item-id="0"></div>
+			{/if}
 			{#each items as item, index (item.id)}
 				<div class="gallery-item" data-item-id={item.id}>
 					<div class="item-content">
