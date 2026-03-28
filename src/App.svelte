@@ -11,27 +11,6 @@
 
 	const items = [
 		{
-			id: 2,
-			backgroundColor: "#ff5900",
-			textColor: "#fff",
-			media: [
-				{
-					type: "image",
-					src: asset("bedside-cover.png"),
-				},
-				{
-					type: "image",
-					src: asset("bedside-back.png"),
-				},
-				{
-					type: "image",
-					src: asset("bedside-3.jpg"),
-				},
-			],
-			title: "The Bedside Guardian 2025",
-			url: "https://www.theguardian.com/environment/ng-interactive/2025/nov/26/beside-2025-a-glimpse-of-the-future-of-coastal-cities",
-		},
-		{
 			id: 3,
 			backgroundColor: "#3399FF",
 			textColor: "#fff",
@@ -61,6 +40,28 @@
 			],
 			title: "The Black Panther Cubs — When The Revolution Doesn't Come",
 		},
+		{
+			id: 2,
+			backgroundColor: "#ff5900",
+			textColor: "#fff",
+			media: [
+				{
+					type: "image",
+					src: asset("bedside-cover.png"),
+				},
+				{
+					type: "image",
+					src: asset("bedside-back.png"),
+				},
+				{
+					type: "image",
+					src: asset("bedside-3.jpg"),
+				},
+			],
+			title: "The Bedside Guardian 2025",
+			url: "https://www.theguardian.com/environment/ng-interactive/2025/nov/26/beside-2025-a-glimpse-of-the-future-of-coastal-cities",
+		},
+
 		{
 			id: 11,
 			backgroundColor: "#2C2C26",
@@ -217,44 +218,44 @@
 			],
 			title: "Okinawa: The bone hunter",
 		},
-		{
-			id: 7,
-			backgroundColor: "#091BC5",
-			textColor: "#fff",
-			media: [
-				{
-					type: "image",
-					src: asset("alex-1.jpg"),
-				},
-				{
-					type: "image",
-					src: asset("alex-2.jpg"),
-				},
-				{
-					type: "video",
-					src: asset("alex-3.mp4"),
-					poster: asset("alex-3-poster.jpg"),
-				},
-				{
-					type: "image",
-					src: asset("alex-4.jpg"),
-				},
-				{
-					type: "image",
-					src: asset("alex-5.jpg"),
-				},
-				{
-					type: "image",
-					src: asset("alex-6.jpg"),
-				},
-				{
-					type: "video",
-					src: asset("alex-7.mp4"),
-					poster: asset("alex-7-poster.jpg"),
-				},
-			],
-			title: "Alex Mourant website",
-		},
+		// {
+		// 	id: 7,
+		// 	backgroundColor: "#091BC5",
+		// 	textColor: "#fff",
+		// 	media: [
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-1.jpg"),
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-2.jpg"),
+		// 		},
+		// 		{
+		// 			type: "video",
+		// 			src: asset("alex-3.mp4"),
+		// 			poster: asset("alex-3-poster.jpg"),
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-4.jpg"),
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-5.jpg"),
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-6.jpg"),
+		// 		},
+		// 		{
+		// 			type: "video",
+		// 			src: asset("alex-7.mp4"),
+		// 			poster: asset("alex-7-poster.jpg"),
+		// 		},
+		// 	],
+		// 	title: "Alex Mourant website",
+		// },
 		{
 			id: 8,
 			backgroundColor: "#2C2C26",

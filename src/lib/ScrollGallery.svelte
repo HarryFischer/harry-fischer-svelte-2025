@@ -1,8 +1,10 @@
 <script>
-	import { onMount } from "svelte";
+	import { onMount, tick } from "svelte";
 	import gsap from "gsap";
 
 	export let items = [];
+	export let cursorLeftUrl = `${import.meta.env.BASE_URL}assets/cursor-left.png`;
+	export let cursorRightUrl = `${import.meta.env.BASE_URL}assets/cursor-right.png`;
 
 	let scrollContainer;
 	let galleryWrapper;
@@ -15,10 +17,38 @@
 	let visibleItems = new Set();
 	let infoOverlayOpen = false;
 	let copiedEmail = false;
+	let mediaOrientations = {};
+	let isDesktopViewport = false;
 	const carouselStates = new Map();
 	const carouselIndices = {};
-	const CAROUSEL_GAP = 8;
-	const CAROUSEL_WIDTH_RATIO = 0.8;
+	const DESKTOP_BREAKPOINT = 980;
+	const CAROUSEL_GAP_MOBILE = 8;
+	const CAROUSEL_GAP_DESKTOP = 20;
+	const CAROUSEL_WIDTH_RATIO_MOBILE = 0.8;
+	const CAROUSEL_WIDTH_RATIO_DESKTOP = 0.3;
+	const CURSOR_HOTSPOT_X = 16;
+	const CURSOR_HOTSPOT_Y = 16;
+
+	const getDirectionalCursor = (direction) => {
+		const fallback = direction < 0 ? "w-resize" : "e-resize";
+		const cursorUrl = direction < 0 ? cursorLeftUrl : cursorRightUrl;
+		if (!cursorUrl) return fallback;
+
+		return `url("${cursorUrl}") ${CURSOR_HOTSPOT_X} ${CURSOR_HOTSPOT_Y}, ${fallback}`;
+	};
+
+	const getCarouselSizing = () => {
+		const isDesktop =
+			typeof window !== "undefined" && window.innerWidth > DESKTOP_BREAKPOINT;
+
+		return {
+			isDesktop,
+			gap: isDesktop ? CAROUSEL_GAP_DESKTOP : CAROUSEL_GAP_MOBILE,
+			widthRatio: isDesktop
+				? CAROUSEL_WIDTH_RATIO_DESKTOP
+				: CAROUSEL_WIDTH_RATIO_MOBILE,
+		};
+	};
 
 	const copyToClipboard = (text) => {
 		navigator.clipboard.writeText(text).then(() => {
@@ -109,8 +139,8 @@
 		carouselIndices;
 	}
 
-	const getCarouselSlides = (media = []) => {
-		if (media.length <= 1) return media;
+	const getCarouselSlides = (media = [], shouldLoop = true) => {
+		if (!shouldLoop || media.length <= 1) return media;
 		const first = media[0];
 		const last = media[media.length - 1];
 		return [last, ...media, first];
@@ -121,9 +151,15 @@
 		withTransition = true,
 		dragOffset = 0,
 	) => {
-		const baseOffset = (state.viewport.clientWidth - state.slideWidth) / 2;
-		const offset =
-			-state.index * (state.slideWidth + state.gap) + baseOffset + dragOffset;
+		const activeSlide = state.track.children[state.index];
+		const fallbackOffset =
+			-state.index * (state.slideWidth + state.gap) +
+			(state.viewport.clientWidth - state.slideWidth) / 2;
+		const centeredOffset = activeSlide
+			? state.viewport.clientWidth / 2 -
+				(activeSlide.offsetLeft + activeSlide.clientWidth / 2)
+			: fallbackOffset;
+		const offset = centeredOffset + dragOffset;
 
 		if (withTransition) {
 			gsap.to(state.track, {
@@ -131,19 +167,16 @@
 				duration: 0.45,
 				ease: "power2.out",
 				onComplete: () => {
+					if (!state.shouldLoop) return;
 					// Handle infinite loop wrapping
 					if (state.slides.length <= 1) return;
 					if (state.index === 0) {
 						state.index = state.slides.length - 2;
-						gsap.set(state.track, {
-							x: -state.index * (state.slideWidth + state.gap) + baseOffset,
-						});
+						applyCarouselTransform(state, false);
 					}
 					if (state.index === state.slides.length - 1) {
 						state.index = 1;
-						gsap.set(state.track, {
-							x: -state.index * (state.slideWidth + state.gap) + baseOffset,
-						});
+						applyCarouselTransform(state, false);
 					}
 				},
 			});
@@ -152,15 +185,29 @@
 		}
 
 		// Update reactive index for pagination
-		const realIndex = state.index - 1;
+		const realIndex = state.shouldLoop ? state.index - 1 : state.index;
+		const maxRealIndex = state.shouldLoop
+			? state.slides.length - 2
+			: state.slides.length;
 		carouselIndices[state.id] =
-			realIndex >= 0 && realIndex < state.slides.length - 2 ? realIndex : 0;
+			realIndex >= 0 && realIndex < maxRealIndex ? realIndex : 0;
 	};
 
 	const moveCarousel = (id, direction) => {
 		const state = carouselStates.get(id);
 		if (!state) return;
-		state.index += direction;
+
+		if (state.shouldLoop) {
+			state.index += direction;
+		} else {
+			const minIndex = 0;
+			const maxIndex = Math.max(0, state.slides.length - 1);
+			state.index = Math.min(
+				maxIndex,
+				Math.max(minIndex, state.index + direction),
+			);
+		}
+
 		applyCarouselTransform(state, true);
 
 		// Pause all carousel videos and play only the visible one
@@ -179,20 +226,99 @@
 		}
 	};
 
+	const canMoveCarousel = (id, direction) => {
+		const state = carouselStates.get(id);
+		if (!state || state.shouldLoop) return true;
+
+		const minIndex = 0;
+		const maxIndex = Math.max(0, state.slides.length - 1);
+		if (direction < 0) return state.index > minIndex;
+		return state.index < maxIndex;
+	};
+
+	const getRenderedSlideWidth = (track, fallbackWidth) => {
+		const firstSlide = track.querySelector(".carousel-slide");
+		if (!firstSlide) return fallbackWidth;
+
+		const measuredWidth = firstSlide.getBoundingClientRect().width;
+		return measuredWidth > 0 ? measuredWidth : fallbackWidth;
+	};
+
+	const refreshCarouselLayouts = () => {
+		carouselStates.forEach((state) => {
+			const {
+				isDesktop,
+				gap: nextGap,
+				widthRatio: nextWidthRatio,
+			} = getCarouselSizing();
+			const nextShouldLoop = !isDesktop;
+			if (state.shouldLoop !== nextShouldLoop) {
+				const currentRealIndex = state.shouldLoop
+					? state.index - 1
+					: state.index;
+				state.shouldLoop = nextShouldLoop;
+				state.slides = getCarouselSlides(state.media, state.shouldLoop);
+				state.index = state.shouldLoop
+					? Math.max(1, Math.min(state.slides.length - 2, currentRealIndex + 1))
+					: Math.max(0, Math.min(state.slides.length - 1, currentRealIndex));
+			}
+			state.gap = nextGap;
+			const fallbackWidth = state.viewport.clientWidth * nextWidthRatio;
+			state.slideWidth = getRenderedSlideWidth(state.track, fallbackWidth);
+			applyCarouselTransform(state, false);
+		});
+	};
+
+	const setMediaOrientation = (src, event) => {
+		if (!src) return;
+
+		const element = event.currentTarget;
+		if (!element) return;
+
+		let width = 0;
+		let height = 0;
+
+		if (element.tagName === "IMG") {
+			width = element.naturalWidth;
+			height = element.naturalHeight;
+		} else if (element.tagName === "VIDEO") {
+			width = element.videoWidth;
+			height = element.videoHeight;
+		}
+
+		if (!width || !height) return;
+
+		const orientation = width >= height ? "landscape" : "portrait";
+		if (mediaOrientations[src] === orientation) return;
+
+		mediaOrientations = {
+			...mediaOrientations,
+			[src]: orientation,
+		};
+
+		// Orientation classes can change slide width, so re-measure and recenter.
+		requestAnimationFrame(refreshCarouselLayouts);
+	};
+
 	const carousel = (node, { id, media }) => {
 		const viewport = node.querySelector(".carousel-viewport");
 		const track = node.querySelector(".carousel-track");
 		if (!viewport || !track) return {};
 
-		const slides = getCarouselSlides(media);
+		const { isDesktop, gap, widthRatio } = getCarouselSizing();
+		const shouldLoop = !isDesktop;
+		const slides = getCarouselSlides(media, shouldLoop);
+		const fallbackSlideWidth = viewport.clientWidth * widthRatio;
 		const state = {
 			id,
+			media,
 			slides,
-			index: slides.length > 1 ? 1 : 0,
+			index: shouldLoop && slides.length > 1 ? 1 : 0,
 			viewport,
 			track,
-			slideWidth: 0,
-			gap: CAROUSEL_GAP,
+			slideWidth: getRenderedSlideWidth(track, fallbackSlideWidth),
+			gap,
+			shouldLoop,
 			startX: 0,
 			currentX: 0,
 			isDragging: false,
@@ -201,8 +327,43 @@
 		carouselStates.set(id, state);
 
 		const updateSize = () => {
-			state.slideWidth = viewport.clientWidth * CAROUSEL_WIDTH_RATIO;
+			const {
+				isDesktop,
+				gap: nextGap,
+				widthRatio: nextWidthRatio,
+			} = getCarouselSizing();
+			const nextShouldLoop = !isDesktop;
+			if (state.shouldLoop !== nextShouldLoop) {
+				const currentRealIndex = state.shouldLoop
+					? state.index - 1
+					: state.index;
+				state.shouldLoop = nextShouldLoop;
+				state.slides = getCarouselSlides(state.media, state.shouldLoop);
+				state.index = state.shouldLoop
+					? Math.max(1, Math.min(state.slides.length - 2, currentRealIndex + 1))
+					: Math.max(0, Math.min(state.slides.length - 1, currentRealIndex));
+			}
+			state.gap = nextGap;
+			const fallbackWidth = viewport.clientWidth * nextWidthRatio;
+			state.slideWidth = getRenderedSlideWidth(track, fallbackWidth);
 			applyCarouselTransform(state, false);
+		};
+
+		const getDirectionFromClientX = (clientX) => {
+			const rect = viewport.getBoundingClientRect();
+			const midpoint = rect.left + rect.width / 2;
+			return clientX < midpoint ? -1 : 1;
+		};
+
+		const updateViewportCursor = (clientX) => {
+			if (state.shouldLoop) {
+				viewport.style.cursor = "";
+				return;
+			}
+
+			viewport.style.cursor = getDirectionalCursor(
+				getDirectionFromClientX(clientX),
+			);
 		};
 
 		const onPointerDown = (event) => {
@@ -210,10 +371,13 @@
 			state.startX = event.clientX;
 			state.currentX = event.clientX;
 			viewport.setPointerCapture(event.pointerId);
+			updateViewportCursor(event.clientX);
 		};
 
 		const onPointerMove = (event) => {
+			updateViewportCursor(event.clientX);
 			if (!state.isDragging) return;
+			if (!state.shouldLoop && event.pointerType === "mouse") return;
 			state.currentX = event.clientX;
 			const delta = state.currentX - state.startX;
 			applyCarouselTransform(state, false, delta);
@@ -223,6 +387,13 @@
 			if (!state.isDragging) return;
 			state.isDragging = false;
 			viewport.releasePointerCapture(event.pointerId);
+
+			if (!state.shouldLoop && event.pointerType === "mouse") {
+				moveCarousel(id, getDirectionFromClientX(event.clientX));
+				updateViewportCursor(event.clientX);
+				return;
+			}
+
 			const delta = state.currentX - state.startX;
 			if (Math.abs(delta) > 50) {
 				moveCarousel(id, delta < 0 ? 1 : -1);
@@ -231,28 +402,51 @@
 			}
 		};
 
+		const onPointerEnter = (event) => {
+			updateViewportCursor(event.clientX);
+		};
+
+		const onPointerLeave = () => {
+			viewport.style.cursor = "";
+		};
+
 		const resizeObserver = new ResizeObserver(updateSize);
 		resizeObserver.observe(viewport);
 		updateSize();
 
 		viewport.addEventListener("pointerdown", onPointerDown);
+		viewport.addEventListener("pointerenter", onPointerEnter);
 		viewport.addEventListener("pointermove", onPointerMove);
 		viewport.addEventListener("pointerup", onPointerUp);
 		viewport.addEventListener("pointercancel", onPointerUp);
+		viewport.addEventListener("pointerleave", onPointerLeave);
 
 		return {
 			destroy() {
 				resizeObserver.disconnect();
 				viewport.removeEventListener("pointerdown", onPointerDown);
+				viewport.removeEventListener("pointerenter", onPointerEnter);
 				viewport.removeEventListener("pointermove", onPointerMove);
 				viewport.removeEventListener("pointerup", onPointerUp);
 				viewport.removeEventListener("pointercancel", onPointerUp);
+				viewport.removeEventListener("pointerleave", onPointerLeave);
 				carouselStates.delete(id);
 			},
 		};
 	};
 
 	onMount(() => {
+		const updateViewportMode = async () => {
+			const nextIsDesktop = window.innerWidth > DESKTOP_BREAKPOINT;
+			if (nextIsDesktop === isDesktopViewport) return;
+			isDesktopViewport = nextIsDesktop;
+			await tick();
+			requestAnimationFrame(refreshCarouselLayouts);
+		};
+
+		updateViewportMode();
+		window.addEventListener("resize", updateViewportMode);
+
 		backgroundColor = items[0]?.backgroundColor || "#ffffff";
 		textColor = items[0]?.textColor || "#000";
 
@@ -410,6 +604,7 @@
 		});
 
 		return () => {
+			window.removeEventListener("resize", updateViewportMode);
 			observer.disconnect();
 			carouselObservers.forEach((carouselObserver) => {
 				carouselObserver.disconnect();
@@ -444,7 +639,7 @@
 			<div class="gallery-item empty" data-item-id="0"></div>
 			{#each items as item, index (item.id)}
 				<div class="gallery-item" data-item-id={item.id}>
-					<div class="item-content">
+					<div class="item-content" class:single-media={!item.media}>
 						{#if item.media && item.media.length > 1}
 							<div
 								class="carousel"
@@ -455,18 +650,27 @@
 									class="carousel-arrow left"
 									type="button"
 									aria-label="Previous image"
+									disabled={!canMoveCarousel(item.id, -1)}
 									on:click={() => moveCarousel(item.id, -1)}
 								>
 									←
 								</button>
 								<div class="carousel-viewport">
 									<div class="carousel-track">
-										{#each getCarouselSlides(item.media) as mediaItem, mediaIndex}
-											<div class="carousel-slide">
+										{#each getCarouselSlides(item.media, !isDesktopViewport) as mediaItem, mediaIndex}
+											<div
+												class="carousel-slide"
+												class:is-portrait={mediaOrientations[mediaItem.src] ===
+													"portrait"}
+												class:is-landscape={mediaOrientations[mediaItem.src] ===
+													"landscape"}
+											>
 												{#if mediaItem.type === "video"}
 													<video
 														src={mediaItem.src}
 														poster={mediaItem.poster}
+														on:loadedmetadata={(event) =>
+															setMediaOrientation(mediaItem.src, event)}
 														loop
 														muted
 														playsinline
@@ -476,6 +680,8 @@
 													<img
 														loading="lazy"
 														src={mediaItem.src}
+														on:load={(event) =>
+															setMediaOrientation(mediaItem.src, event)}
 														alt={`${item.title} ${mediaIndex + 1}`}
 													/>
 												{/if}
@@ -487,6 +693,7 @@
 									class="carousel-arrow right"
 									type="button"
 									aria-label="Next image"
+									disabled={!canMoveCarousel(item.id, 1)}
 									on:click={() => moveCarousel(item.id, 1)}
 								>
 									→
@@ -500,7 +707,9 @@
 											on:click={() => {
 												const state = carouselStates.get(item.id);
 												if (state) {
-													state.index = dotIndex + 1;
+													state.index = state.shouldLoop
+														? dotIndex + 1
+														: dotIndex;
 													applyCarouselTransform(state, true);
 												}
 											}}
@@ -512,13 +721,24 @@
 							<video
 								src={item.src}
 								poster={item.poster}
+								class:is-portrait={mediaOrientations[item.src] === "portrait"}
+								class:is-landscape={mediaOrientations[item.src] === "landscape"}
+								on:loadedmetadata={(event) =>
+									setMediaOrientation(item.src, event)}
 								loop
 								muted
 								playsinline
 								preload="metadata"
 							></video>
 						{:else if item.type === "image"}
-							<img loading="lazy" src={item.src} alt={item.title} />
+							<img
+								loading="lazy"
+								src={item.src}
+								class:is-portrait={mediaOrientations[item.src] === "portrait"}
+								class:is-landscape={mediaOrientations[item.src] === "landscape"}
+								on:load={(event) => setMediaOrientation(item.src, event)}
+								alt={item.title}
+							/>
 						{:else}{/if}
 						{#if item.url}
 							<a href={item.url} target="_blank" rel="noopener noreferrer">
