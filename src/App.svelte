@@ -11,56 +11,63 @@
 
 	const items = [
 		{
-			id: 2,
-			backgroundColor: "#ff5900",
-			textColor: "#fff",
-			media: [
-				{
-					type: "image",
-					src: asset("bedside-cover.png"),
-				},
-				{
-					type: "image",
-					src: asset("bedside-back.png"),
-				},
-				{
-					type: "image",
-					src: asset("bedside-3.jpg"),
-				},
-			],
-			title: "The Bedside Guardian 2025",
-			url: "https://www.theguardian.com/environment/ng-interactive/2025/nov/26/beside-2025-a-glimpse-of-the-future-of-coastal-cities",
-		},
-		{
 			id: 3,
 			backgroundColor: "#3399FF",
 			textColor: "#fff",
 			media: [
 				{
 					type: "image",
-					src: asset("cubs-0.jpg"),
+					src: asset("cubs-0.webp"),
+					caption: "Poster design",
 				},
 				{
 					type: "video",
 					src: asset("cubs-titles.mp4"),
-					poster: asset("cubs-titles-poster.jpg"),
+					poster: asset("cubs-titles-poster.webp"),
+					caption: "Opening titles sequence",
 				},
 				{
 					type: "video",
 					src: asset("cubs-credits.mp4"),
-					poster: asset("cubs-credits-poster.jpg"),
+					poster: asset("cubs-credits-poster.webp"),
+					caption: "End credits sequence",
 				},
 				{
 					type: "image",
-					src: asset("Cubs-1.png"),
+					src: asset("Cubs-1.webp"),
+					caption: "Article design and development",
 				},
 				{
 					type: "image",
-					src: asset("cubs-poster.jpg"),
+					src: asset("cubs-poster.webp"),
+					caption: "Doc poster",
 				},
 			],
 			title: "The Black Panther Cubs — When The Revolution Doesn't Come",
 		},
+		{
+			id: 2,
+			backgroundColor: "#ff5900",
+			textColor: "#fff",
+			media: [
+				{
+					type: "image",
+					src: asset("bedside-cover.webp"),
+					caption: "Front cover",
+				},
+				{
+					type: "image",
+					src: asset("bedside-back.webp"),
+					caption: "Back cover",
+				},
+				{
+					type: "image",
+					src: asset("bedside-3.webp"),
+				},
+			],
+			title: "The Bedside Guardian 2025",
+		},
+
 		{
 			id: 11,
 			backgroundColor: "#2C2C26",
@@ -69,18 +76,23 @@
 				{
 					type: "video",
 					src: asset("cub-sans-vid.mp4"),
+					poster: asset("cub-sans-vid-poster.webp"),
+					caption: "A new display typeface for The Guardian",
 				},
 				{
 					type: "image",
-					src: asset("cub-sans-char-1.jpg"),
+					src: asset("cub-sans-char-1.webp"),
 				},
 				{
 					type: "image",
-					src: asset("cub-sans-char-2.jpg"),
+					src: asset("cub-sans-char-2.webp"),
 				},
 				{
 					type: "video",
 					src: asset("cub-sans-website.mp4"),
+					poster: asset("cub-sans-website-poster.webp"),
+					caption:
+						"Specimen website <a href='https://design.theguardian.com/cub-sans' target='_blank' rel='noopener'>design.theguardian.com/cub-sans</a>",
 				},
 			],
 			title: "Guardian Cub Sans",
@@ -92,23 +104,28 @@
 			media: [
 				{
 					type: "image",
-					src: asset("elec-artwork-1.jpg"),
+					src: asset("elec-artwork-1.webp"),
+					caption: "Election artwork 1",
 				},
 				{
 					type: "image",
-					src: asset("elec-artwork-2.jpg"),
+					src: asset("elec-artwork-2.webp"),
+					caption: "Election artwork 2",
 				},
 				{
 					type: "image",
-					src: asset("elec-artwork-3.jpg"),
+					src: asset("elec-artwork-3.webp"),
+					caption: "Election artwork 3",
 				},
 				{
 					type: "image",
-					src: asset("elec-artwork-4.jpg"),
+					src: asset("elec-artwork-4.webp"),
+					caption: "Election artwork 4",
 				},
 				{
 					type: "image",
-					src: asset("elec-artwork-5.jpg"),
+					src: asset("elec-artwork-5.webp"),
+					caption: "Election artwork 5",
 				},
 			],
 			title: "UK and US Elections artwork",
@@ -120,35 +137,43 @@
 			media: [
 				{
 					type: "image",
-					src: asset("election-1.jpg"),
+					src: asset("election-1.webp"),
+					caption: "Election results page",
 				},
 				{
 					type: "image",
-					src: asset("election-2.jpg"),
+					src: asset("election-2.webp"),
+					caption: "Constituency breakdown",
 				},
 				{
 					type: "image",
-					src: asset("election-3.jpg"),
+					src: asset("election-3.webp"),
+					caption: "Live results map",
 				},
 				{
 					type: "image",
-					src: asset("election-4.jpg"),
+					src: asset("election-4.webp"),
+					caption: "Party seat tracker",
 				},
 				{
 					type: "image",
-					src: asset("election-5.jpg"),
+					src: asset("election-5.webp"),
+					caption: "Results table",
 				},
 				{
 					type: "image",
-					src: asset("election-6.jpg"),
+					src: asset("election-6.webp"),
+					caption: "Mobile results view",
 				},
 				{
 					type: "image",
-					src: asset("election-7.jpg"),
+					src: asset("election-7.webp"),
+					caption: "US results dashboard",
 				},
 				{
 					type: "image",
-					src: asset("election-8.jpg"),
+					src: asset("election-8.webp"),
+					caption: "State-by-state breakdown",
 				},
 			],
 			title: "UK and US Elections UI",
@@ -160,11 +185,13 @@
 			media: [
 				{
 					type: "image",
-					src: asset("cc-cover.png"),
+					src: asset("cc-cover.webp"),
+					caption: "Cover design",
 				},
 				{
 					type: "image",
-					src: asset("cc-weave-close.jpg"),
+					src: asset("cc-weave-close.webp"),
+					caption: "Weave detail",
 				},
 			],
 			title: "Cotton Capital — the weave",
@@ -175,9 +202,9 @@
 			textColor: "#000",
 			type: "video",
 			src: asset("2035-agi.mp4"),
-			poster: asset("agi-2035-poster.jpg"),
+			poster: asset("agi-2035-poster.webp"),
 			title: "AGI 2035",
-			url: "https://www.theguardian.com/technology/2024/nov/26/agi-2035-the-guardian-prediction-for-the-future-of-artificial-intelligence",
+			caption: "Comic book article design and development",
 		},
 		{
 			id: 5,
@@ -185,8 +212,9 @@
 			textColor: "#fff",
 			type: "video",
 			src: asset("ukraine-skateboarding.mp4"),
-			poster: asset("ukraine-skateboarding-poster.jpg"),
+			poster: asset("ukraine-skateboarding-poster.webp"),
 			title: "Ukraine Skateboarding",
+			caption: "Photoessay design and development",
 		},
 		{
 			id: 6,
@@ -196,81 +224,88 @@
 				{
 					type: "video",
 					src: asset("okinawa-1.mp4"),
-					poster: asset("okinawa-1-poster.jpg"),
+					poster: asset("okinawa-1-poster.webp"),
+					caption: "Opening sequence",
 				},
 				{
 					type: "image",
-					src: asset("okinawa-2.png"),
+					src: asset("okinawa-2.webp"),
+					caption: "Chapter title",
 				},
 				{
 					type: "image",
-					src: asset("okinawa-3.png"),
+					src: asset("okinawa-3.webp"),
+					caption: "Body text layout",
 				},
 				{
 					type: "image",
-					src: asset("okinawa-4.png"),
+					src: asset("okinawa-4.webp"),
+					caption: "Photo essay spread",
 				},
 				{
 					type: "image",
-					src: asset("okinawa-5.png"),
+					src: asset("okinawa-5.webp"),
+					caption: "Pull quote design",
 				},
 			],
 			title: "Okinawa: The bone hunter",
 		},
-		{
-			id: 7,
-			backgroundColor: "#091BC5",
-			textColor: "#fff",
-			media: [
-				{
-					type: "image",
-					src: asset("alex-1.jpg"),
-				},
-				{
-					type: "image",
-					src: asset("alex-2.jpg"),
-				},
-				{
-					type: "video",
-					src: asset("alex-3.mp4"),
-					poster: asset("alex-3-poster.jpg"),
-				},
-				{
-					type: "image",
-					src: asset("alex-4.jpg"),
-				},
-				{
-					type: "image",
-					src: asset("alex-5.jpg"),
-				},
-				{
-					type: "image",
-					src: asset("alex-6.jpg"),
-				},
-				{
-					type: "video",
-					src: asset("alex-7.mp4"),
-					poster: asset("alex-7-poster.jpg"),
-				},
-			],
-			title: "Alex Mourant website",
-		},
+		// {
+		// 	id: 7,
+		// 	backgroundColor: "#091BC5",
+		// 	textColor: "#fff",
+		// 	media: [
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-1.jpg"),
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-2.jpg"),
+		// 		},
+		// 		{
+		// 			type: "video",
+		// 			src: asset("alex-3.mp4"),
+		// 			poster: asset("alex-3-poster.jpg"),
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-4.jpg"),
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-5.jpg"),
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("alex-6.jpg"),
+		// 		},
+		// 		{
+		// 			type: "video",
+		// 			src: asset("alex-7.mp4"),
+		// 			poster: asset("alex-7-poster.jpg"),
+		// 		},
+		// 	],
+		// 	title: "Alex Mourant website",
+		// },
 		{
 			id: 8,
 			backgroundColor: "#2C2C26",
 			textColor: "#fff",
 			type: "video",
 			src: asset("press-vest.mp4"),
-			poster: asset("press-vest-poster.jpg"),
+			poster: asset("press-vest-poster.webp"),
 			title: "The deadly toll on journalists in the Gaza war",
+			caption: "Motion and art direction, The Guardian",
 		},
 		{
 			id: 9,
 			backgroundColor: "tomato",
 			textColor: "#fff",
 			type: "image",
-			src: asset("carbon-bombs-world.png"),
+			src: asset("carbon-bombs-world.webp"),
 			title: "Carbon bombs",
+			caption: "Data visualisation and illustration, The Guardian",
 		},
 		{
 			id: 10,
@@ -279,11 +314,13 @@
 			media: [
 				{
 					type: "image",
-					src: asset("fedrigoni-cal.jpg"),
+					src: asset("fedrigoni-cal.webp"),
+					caption: "Calendar spread",
 				},
 				{
 					type: "image",
-					src: asset("fedrigoni.jpg"),
+					src: asset("fedrigoni.webp"),
+					caption: "Paper stock detail",
 				},
 			],
 			title: "Fedrigoni Calendar 2025",
