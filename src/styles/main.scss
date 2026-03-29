@@ -32,6 +32,18 @@
 	letter-spacing: -0.02em;
 }
 
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
 body {
 	margin: 0;
 	padding: 0;
@@ -217,11 +229,10 @@ button {
 
 			&.in-view {
 				.item-content {
-					h2 {
-						opacity: 1;
-						scale: 1;
-					}
 					.carousel-pagination {
+						opacity: 1;
+					}
+					.carousel-slide.is-active figcaption {
 						opacity: 1;
 					}
 				}
@@ -237,9 +248,9 @@ button {
 				/* box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); */
 				/* transition: box-shadow 0.4s ease; */
 
-				h2 {
-					max-width: 80vw;
-					text-align: center;
+				figure {
+					margin: 0;
+					padding: 0;
 				}
 
 				.carousel {
@@ -265,10 +276,12 @@ button {
 
 				.carousel-slide {
 					flex: 0 0 80%;
-					overflow: hidden;
 					display: flex;
+					flex-direction: column;
 					justify-content: center;
 					align-items: center;
+					margin: 0;
+					padding: 0;
 
 					@include mq.mq($from: desktop) {
 						flex: 0 0 30%;
@@ -322,6 +335,11 @@ button {
 							}
 						}
 					}
+
+					figcaption {
+						opacity: 0;
+						transition: opacity 0.3s ease;
+					}
 				}
 
 				.carousel-arrow {
@@ -367,7 +385,7 @@ button {
 					height: 8px;
 					border-radius: 50%;
 					border: none;
-					background: rgba(0, 0, 0, 0.6);
+					background: color-mix(in srgb, var(--text-color) 50%, transparent);
 					cursor: pointer;
 					padding: 0;
 					transition:
@@ -375,11 +393,11 @@ button {
 						transform 0.3s ease;
 
 					&:hover {
-						background: rgba(0, 0, 0, 0.8);
+						background: color-mix(in srgb, var(--text-color) 75%, transparent);
 					}
 
 					&.active {
-						background: rgba(0, 0, 0, 1);
+						background: var(--text-color);
 						transform: scale(1.2);
 					}
 				}
@@ -390,23 +408,20 @@ button {
 					}
 				}
 
-				a {
-					text-decoration: none;
-					color: white;
-				}
-				h2 {
-					color: white;
-					background-color: rgba(0, 0, 0, 0.6);
-					margin: 8px 0 0 0;
-					border-radius: 20px;
-					width: max-content;
-					padding: 2px 20px 3px;
+				figcaption {
 					font-size: 14px;
-					opacity: 0;
-					scale: 0.8;
-					transition:
-						opacity 0.25s ease,
-						transform 0.25s ease;
+					margin: 10px 0 0 0;
+					text-align: center;
+					color: var(--text-color);
+
+					a {
+						color: var(--text-color);
+						text-decoration: underline;
+						text-underline-offset: 2px;
+						&:hover {
+							opacity: 0.7;
+						}
+					}
 				}
 
 				span {

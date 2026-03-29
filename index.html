@@ -2,15 +2,42 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>harry-fischer-svelte-2025</title>
+		<title>Harry Fischer — Designer &amp; Developer</title>
+		<meta name="description" content="Lead designer and developer working across digital design, art direction, and typography. Currently at The Guardian, based in London." />
+
+		<!-- Open Graph -->
+		<meta property="og:title" content="Harry Fischer — Designer &amp; Developer" />
+		<meta property="og:description" content="Lead designer and developer working across digital design, art direction, and typography. Currently at The Guardian, based in London." />
+		<meta property="og:image" content="https://www.harryfischer.co.uk/assets/cubs-0.webp" />
+		<meta property="og:url" content="https://www.harryfischer.co.uk/" />
+		<meta property="og:type" content="website" />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Harry Fischer — Designer &amp; Developer" />
+		<meta name="twitter:description" content="Lead designer and developer working across digital design, art direction, and typography. Currently at The Guardian, based in London." />
+		<meta name="twitter:image" content="https://www.harryfischer.co.uk/assets/cubs-0.webp" />
+
+		<!-- LCP preload -->
+		<link rel="preload" as="image" href="/assets/cubs-0.webp" />
+
+		<!-- Google Fonts — async to avoid render-blocking -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
+			rel="preload"
 			href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
-			rel="stylesheet"
+			as="style"
+			onload="this.onload=null;this.rel='stylesheet'"
 		/>
+		<noscript>
+			<link
+				rel="stylesheet"
+				href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+			/>
+		</noscript>
 	</head>
 	<body>
 		<div id="app"></div>

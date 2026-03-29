@@ -191,6 +191,25 @@
 			: state.slides.length;
 		carouselIndices[state.id] =
 			realIndex >= 0 && realIndex < maxRealIndex ? realIndex : 0;
+
+		// Mark the active slide so its figcaption becomes visible
+		Array.from(state.track.children).forEach((slide, idx) => {
+			slide.classList.toggle("is-active", idx === state.index);
+		});
+	};
+
+	const playCarouselVideoAtIndex = (carouselNode, state) => {
+		const track = carouselNode.querySelector(".carousel-track");
+		if (!track) return;
+		carouselNode.querySelectorAll("video").forEach((video) => {
+			const slide = video.closest(".carousel-slide");
+			const slideIdx = slide ? Array.from(track.children).indexOf(slide) : -1;
+			if (slideIdx === state.index) {
+				video.play().catch(() => {});
+			} else {
+				video.pause();
+			}
+		});
 	};
 
 	const moveCarousel = (id, direction) => {
@@ -210,19 +229,9 @@
 
 		applyCarouselTransform(state, true);
 
-		// Pause all carousel videos and play only the visible one
 		const carouselNode = document.querySelector(`[data-carousel-id="${id}"]`);
 		if (carouselNode) {
-			const allVideos = carouselNode.querySelectorAll("video");
-			allVideos.forEach((video, idx) => {
-				// Index 0 is the clone at the end, index 1 is first real slide, etc.
-				// The visible slide is at index + 1 (accounting for clone)
-				if (idx === state.index) {
-					video.play().catch(() => {});
-				} else {
-					video.pause();
-				}
-			});
+			playCarouselVideoAtIndex(carouselNode, state);
 		}
 	};
 
@@ -513,12 +522,7 @@
 						if (carousel) {
 							const carouselState = carouselStates.get(itemId);
 							if (carouselState) {
-								const allVideos = carousel.querySelectorAll("video");
-								allVideos.forEach((video, idx) => {
-									if (idx === carouselState.index) {
-										video.play().catch(() => {});
-									}
-								});
+								playCarouselVideoAtIndex(carousel, carouselState);
 							}
 						}
 
@@ -582,9 +586,23 @@
 						const itemVisible = itemId !== null && visibleItems.has(itemId);
 
 						if (entry.isIntersecting && itemVisible) {
-							video.play().catch((err) => {
-								console.log("Video play failed:", err);
-							});
+							// On desktop the viewport is wide enough that adjacent slides are
+							// also visible, so guard against playing a non-current slide.
+							const carouselState = itemId !== null ? carouselStates.get(itemId) : null;
+							if (carouselState) {
+								const track = video.closest(".carousel-track");
+								const slide = video.closest(".carousel-slide");
+								const slideIdx = slide && track ? Array.from(track.children).indexOf(slide) : -1;
+								if (slideIdx === carouselState.index) {
+									video.play().catch(() => {});
+								} else {
+									video.pause();
+								}
+							} else {
+								video.play().catch((err) => {
+									console.log("Video play failed:", err);
+								});
+							}
 						} else {
 							video.pause();
 						}
@@ -640,6 +658,7 @@
 			{#each items as item, index (item.id)}
 				<div class="gallery-item" data-item-id={item.id}>
 					<div class="item-content" class:single-media={!item.media}>
+						<h2 class="sr-only">{item.title}</h2>
 						{#if item.media && item.media.length > 1}
 							<div
 								class="carousel"
@@ -658,7 +677,7 @@
 								<div class="carousel-viewport">
 									<div class="carousel-track">
 										{#each getCarouselSlides(item.media, !isDesktopViewport) as mediaItem, mediaIndex}
-											<div
+											<figure
 												class="carousel-slide"
 												class:is-portrait={mediaOrientations[mediaItem.src] ===
 													"portrait"}
@@ -685,7 +704,10 @@
 														alt={`${item.title} ${mediaIndex + 1}`}
 													/>
 												{/if}
-											</div>
+												{#if mediaItem.caption}
+													<figcaption>{@html mediaItem.caption}</figcaption>
+												{/if}
+											</figure>
 										{/each}
 									</div>
 								</div>
@@ -717,35 +739,41 @@
 									{/each}
 								</div>
 							</div>
-						{:else if item.type === "video"}
-							<video
-								src={item.src}
-								poster={item.poster}
-								class:is-portrait={mediaOrientations[item.src] === "portrait"}
-								class:is-landscape={mediaOrientations[item.src] === "landscape"}
-								on:loadedmetadata={(event) =>
-									setMediaOrientation(item.src, event)}
-								loop
-								muted
-								playsinline
-								preload="metadata"
-							></video>
-						{:else if item.type === "image"}
-							<img
-								loading="lazy"
-								src={item.src}
-								class:is-portrait={mediaOrientations[item.src] === "portrait"}
-								class:is-landscape={mediaOrientations[item.src] === "landscape"}
-								on:load={(event) => setMediaOrientation(item.src, event)}
-								alt={item.title}
-							/>
-						{:else}{/if}
-						{#if item.url}
-							<a href={item.url} target="_blank" rel="noopener noreferrer">
-								<h2>{item.title}</h2>
-							</a>
 						{:else}
-							<h2>{item.title}</h2>
+							<figure>
+								{#if item.type === "video"}
+									<video
+										src={item.src}
+										poster={item.poster}
+										class:is-portrait={mediaOrientations[item.src] === "portrait"}
+										class:is-landscape={mediaOrientations[item.src] === "landscape"}
+										on:loadedmetadata={(event) =>
+											setMediaOrientation(item.src, event)}
+										loop
+										muted
+										playsinline
+										preload="metadata"
+									></video>
+								{:else if item.type === "image"}
+									<img
+										loading="lazy"
+										src={item.src}
+										class:is-portrait={mediaOrientations[item.src] === "portrait"}
+										class:is-landscape={mediaOrientations[item.src] === "landscape"}
+										on:load={(event) => setMediaOrientation(item.src, event)}
+										alt={item.title}
+									/>
+								{/if}
+								{#if item.caption}
+									<figcaption>
+										{#if item.url}
+											<a href={item.url} target="_blank" rel="noopener noreferrer">{@html item.caption}</a>
+										{:else}
+											{@html item.caption}
+										{/if}
+									</figcaption>
+								{/if}
+							</figure>
 						{/if}
 					</div>
 				</div>
@@ -806,7 +834,7 @@
 	<div class="contact-box">
 		<div class="contact-content">
 			<div class="contact-label" style="color: var(--text-color)">
-				Get in touch — open to comissions
+				Get in touch — open to commissions
 			</div>
 			<button
 				bind:this={contactEmailButton}
