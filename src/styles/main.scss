@@ -176,6 +176,7 @@ button {
 	}
 	h1 {
 		padding-bottom: 4px;
+		margin-right: 0.1em;
 	}
 	h1,
 	p {
@@ -235,6 +236,9 @@ button {
 					.carousel-slide.is-active figcaption {
 						opacity: 1;
 					}
+					figure figcaption {
+						opacity: 1;
+					}
 				}
 			}
 
@@ -251,6 +255,12 @@ button {
 				figure {
 					margin: 0;
 					padding: 0;
+
+					figcaption {
+						opacity: 0;
+						height: 3em;
+						transition: opacity 0.3s ease;
+					}
 				}
 
 				.carousel {
@@ -307,6 +317,7 @@ button {
 						width: 100%;
 						height: 60vh;
 						object-fit: contain;
+						max-width: 90vw;
 						@include mq.mq($from: desktop) {
 							height: 70vh;
 							max-width: 100%;
@@ -338,6 +349,7 @@ button {
 
 					figcaption {
 						opacity: 0;
+						height: 3em;
 						transition: opacity 0.3s ease;
 					}
 				}
@@ -443,9 +455,11 @@ button {
 
 				&.single-media {
 					max-width: 100vw;
+					width: 100vw;
 
 					img,
 					video {
+						width: 100%;
 						object-fit: contain;
 					}
 
@@ -579,7 +593,7 @@ button:focus-visible {
 	left: 0;
 	right: 0;
 	padding: 20px 12px 20px;
-	// pointer-events: none;
+	pointer-events: none;
 	z-index: 50;
 	background: linear-gradient(to bottom, transparent 0%, var(--bg-color) 45%);
 
