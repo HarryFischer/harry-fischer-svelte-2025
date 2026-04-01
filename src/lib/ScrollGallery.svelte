@@ -18,6 +18,7 @@
 	let infoOverlayOpen = false;
 	let copiedEmail = false;
 	let mediaOrientations = {};
+	let blockedVideos = new Set();
 	const carouselStates = new Map();
 	const carouselIndices = {};
 	const DESKTOP_BREAKPOINT = 980;
@@ -176,6 +177,15 @@
 		});
 	};
 
+	const tryPlayVideo = (video) => {
+		video.play().catch(() => {});
+		setTimeout(() => {
+			if (video.paused) {
+				blockedVideos = new Set([...blockedVideos, video.src]);
+			}
+		}, 1000);
+	};
+
 	const playCarouselVideoAtIndex = (carouselNode, state) => {
 		const track = carouselNode.querySelector(".carousel-track");
 		if (!track) return;
@@ -183,7 +193,7 @@
 			const slide = video.closest(".carousel-slide");
 			const slideIdx = slide ? Array.from(track.children).indexOf(slide) : -1;
 			if (slideIdx === state.index) {
-				video.play().catch(() => {});
+				tryPlayVideo(video);
 			} else {
 				video.pause();
 			}
@@ -310,32 +320,54 @@
 		};
 
 		const onPointerDown = (event) => {
-			state.isDragging = true;
+			state.isDragging = false;
+			state.axisLocked = null;
 			state.startX = event.clientX;
+			state.startY = event.clientY;
 			state.currentX = event.clientX;
-			viewport.setPointerCapture(event.pointerId);
-			updateViewportCursor(event.clientX);
+			if (event.pointerType === "mouse") {
+				viewport.setPointerCapture(event.pointerId);
+				updateViewportCursor(event.clientX);
+			}
 		};
 
 		const onPointerMove = (event) => {
 			updateViewportCursor(event.clientX);
-			if (!state.isDragging) return;
 			if (event.pointerType === "mouse") return;
+
+			const dx = event.clientX - state.startX;
+			const dy = event.clientY - state.startY;
+
+			// Determine axis lock once we have enough movement
+			if (!state.axisLocked && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+				state.axisLocked = Math.abs(dx) >= Math.abs(dy) ? "x" : "y";
+				if (state.axisLocked === "x") {
+					state.isDragging = true;
+					viewport.setPointerCapture(event.pointerId);
+				}
+			}
+
+			if (!state.isDragging || state.axisLocked !== "x") return;
 			state.currentX = event.clientX;
-			const delta = state.currentX - state.startX;
-			applyCarouselTransform(state, false, delta);
+			applyCarouselTransform(state, false, dx);
 		};
 
 		const onPointerUp = (event) => {
-			if (!state.isDragging) return;
+			const wasDragging = state.isDragging;
 			state.isDragging = false;
-			viewport.releasePointerCapture(event.pointerId);
+			state.axisLocked = null;
 
 			if (event.pointerType === "mouse") {
+				if (viewport.hasPointerCapture?.(event.pointerId)) {
+					viewport.releasePointerCapture(event.pointerId);
+				}
 				moveCarousel(id, getDirectionFromClientX(event.clientX));
 				updateViewportCursor(event.clientX);
 				return;
 			}
+
+			if (!wasDragging) return;
+			viewport.releasePointerCapture(event.pointerId);
 
 			const delta = state.currentX - state.startX;
 			if (Math.abs(delta) > 50) {
@@ -386,8 +418,8 @@
 		updateViewportMode();
 		window.addEventListener("resize", updateViewportMode);
 
-		backgroundColor = items[0]?.backgroundColor || "#ffffff";
-		textColor = items[0]?.textColor || "#000";
+		backgroundColor = "#ffffff";
+		textColor = "#000";
 
 		// Wait for fonts to load before measuring the button width
 		if (document.fonts) {
@@ -442,9 +474,7 @@
 						const videos = entry.target.querySelectorAll("video");
 						videos.forEach((video) => {
 							if (video.closest(".carousel")) return;
-							video.play().catch((err) => {
-								console.log("Video play failed:", err);
-							});
+							tryPlayVideo(video);
 						});
 
 						// For carousel videos, play the currently visible one
@@ -528,14 +558,12 @@
 										? Array.from(track.children).indexOf(slide)
 										: -1;
 								if (slideIdx === carouselState.index) {
-									video.play().catch(() => {});
+									tryPlayVideo(video);
 								} else {
 									video.pause();
 								}
 							} else {
-								video.play().catch((err) => {
-									console.log("Video play failed:", err);
-								});
+								tryPlayVideo(video);
 							}
 						} else {
 							video.pause();
@@ -555,8 +583,18 @@
 			carouselObservers.push(carouselObserver);
 		});
 
+		const onScroll = () => {
+			if (scrollContainer.scrollTop < 50) {
+				backgroundColor = "#ffffff";
+				textColor = "#000";
+				updateColors("#ffffff", "#000");
+			}
+		};
+		scrollContainer.addEventListener("scroll", onScroll, { passive: true });
+
 		return () => {
 			window.removeEventListener("resize", updateViewportMode);
+			scrollContainer.removeEventListener("scroll", onScroll);
 			observer.disconnect();
 			carouselObservers.forEach((carouselObserver) => {
 				carouselObserver.disconnect();
@@ -619,16 +657,29 @@
 													"landscape"}
 											>
 												{#if mediaItem.type === "video"}
-													<video
-														src={mediaItem.src}
-														poster={mediaItem.poster}
-														on:loadedmetadata={(event) =>
-															setMediaOrientation(mediaItem.src, event)}
-														loop
-														muted
-														playsinline
-														preload="metadata"
-													></video>
+													<div class="video-wrapper">
+														<video
+															src={mediaItem.src}
+															poster={mediaItem.poster}
+															on:loadedmetadata={(event) =>
+																setMediaOrientation(mediaItem.src, event)}
+															loop
+															muted
+															playsinline
+															preload="metadata"
+														></video>
+														{#if blockedVideos.has(mediaItem.src)}
+															<button class="play-button" type="button" aria-label="Play video"
+																on:click={(e) => {
+																	const v = e.currentTarget.closest(".video-wrapper").querySelector("video");
+																	v.play();
+																	blockedVideos.delete(mediaItem.src);
+																	blockedVideos = blockedVideos;
+																}}>
+																<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+															</button>
+														{/if}
+													</div>
 												{:else}
 													<img
 														loading="lazy"
@@ -674,20 +725,33 @@
 						{:else}
 							<figure>
 								{#if item.type === "video"}
-									<video
-										src={item.src}
-										poster={item.poster}
-										class:is-portrait={mediaOrientations[item.src] ===
-											"portrait"}
-										class:is-landscape={mediaOrientations[item.src] ===
-											"landscape"}
-										on:loadedmetadata={(event) =>
-											setMediaOrientation(item.src, event)}
-										loop
-										muted
-										playsinline
-										preload="metadata"
-									></video>
+									<div class="video-wrapper">
+										<video
+											src={item.src}
+											poster={item.poster}
+											class:is-portrait={mediaOrientations[item.src] ===
+												"portrait"}
+											class:is-landscape={mediaOrientations[item.src] ===
+												"landscape"}
+											on:loadedmetadata={(event) =>
+												setMediaOrientation(item.src, event)}
+											loop
+											muted
+											playsinline
+											preload="metadata"
+										></video>
+										{#if blockedVideos.has(item.src)}
+											<button class="play-button" type="button" aria-label="Play video"
+												on:click={(e) => {
+													const v = e.currentTarget.closest(".video-wrapper").querySelector("video");
+													v.play();
+													blockedVideos.delete(item.src);
+													blockedVideos = blockedVideos;
+												}}>
+												<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+											</button>
+										{/if}
+									</div>
 								{:else if item.type === "image"}
 									<img
 										loading="lazy"
