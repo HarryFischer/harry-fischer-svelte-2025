@@ -18,7 +18,8 @@
 				{
 					type: "image",
 					src: asset("cubs-0.webp"),
-					caption: "Poster design",
+					caption:
+						"The Black Panther Cubs — When The Revolution Doesn't Come, The Guardian",
 				},
 				{
 					type: "video",
@@ -53,16 +54,17 @@
 				{
 					type: "image",
 					src: asset("bedside-cover.webp"),
-					caption: "Front cover",
+					caption: "The Bedside Guardian 2025",
 				},
 				{
 					type: "image",
 					src: asset("bedside-back.webp"),
-					caption: "Back cover",
+					caption: " ",
 				},
 				{
 					type: "image",
 					src: asset("bedside-3.webp"),
+					caption: " ",
 				},
 			],
 			title: "The Bedside Guardian 2025",
@@ -77,22 +79,23 @@
 					type: "video",
 					src: asset("cub-sans-vid.mp4"),
 					poster: asset("cub-sans-vid-poster.webp"),
-					caption: "A new display typeface for The Guardian",
+					caption: "Cub Sans, a new display typeface for The Guardian",
 				},
 				{
 					type: "image",
 					src: asset("cub-sans-char-1.webp"),
+					caption: " ",
 				},
 				{
 					type: "image",
 					src: asset("cub-sans-char-2.webp"),
+					caption: " ",
 				},
 				{
 					type: "video",
 					src: asset("cub-sans-website.mp4"),
 					poster: asset("cub-sans-website-poster.webp"),
-					caption:
-						"Specimen website <a href='https://design.theguardian.com/cub-sans' target='_blank' rel='noopener'>design.theguardian.com/cub-sans</a>",
+					caption: "Specimen website design.theguardian.com/cub-sans",
 				},
 			],
 			title: "Guardian Cub Sans",
@@ -105,27 +108,27 @@
 				{
 					type: "image",
 					src: asset("elec-artwork-1.webp"),
-					caption: "Election artwork 1",
+					caption: "Election artwork",
 				},
 				{
 					type: "image",
 					src: asset("elec-artwork-2.webp"),
-					caption: "Election artwork 2",
+					caption: " ",
 				},
 				{
 					type: "image",
 					src: asset("elec-artwork-3.webp"),
-					caption: "Election artwork 3",
+					caption: " ",
 				},
 				{
 					type: "image",
 					src: asset("elec-artwork-4.webp"),
-					caption: "Election artwork 4",
+					caption: " ",
 				},
 				{
 					type: "image",
 					src: asset("elec-artwork-5.webp"),
-					caption: "Election artwork 5",
+					caption: " ",
 				},
 			],
 			title: "UK and US Elections artwork",
@@ -186,7 +189,8 @@
 				{
 					type: "image",
 					src: asset("cc-cover.webp"),
-					caption: "Cover design",
+					caption:
+						"Cotton Capital: how slavery changed the Guardian, Britain and the world, The Guardian",
 				},
 				{
 					type: "image",
