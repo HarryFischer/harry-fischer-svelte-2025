@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from "svelte";
+	import { hasContext, onMount } from "svelte";
 	import ScrollGallery from "./lib/ScrollGallery.svelte";
 
 	let isLoading = true;
@@ -198,8 +198,9 @@
 			textColor: "#fff",
 			media: [
 				{
-					type: "image",
-					src: asset("cc-cover.webp"),
+					type: "video",
+					hasAudio: true,
+					src: asset("230319_Cotton-Capital-V3.mp4"),
 					caption:
 						"Cotton Capital: how slavery changed the Guardian, Britain and the world, The Guardian",
 				},
@@ -207,6 +208,12 @@
 					type: "image",
 					src: asset("cc-weave-close.webp"),
 					caption: "Weave detail",
+				},
+				{
+					type: "video",
+					hasAudio: false,
+					src: asset("weave-cc.mp4"),
+					caption: " ",
 				},
 			],
 			title: "Cotton Capital — the weave",
@@ -219,7 +226,7 @@
 			src: asset("2035-agi.mp4"),
 			poster: asset("agi-2035-poster.webp"),
 			title: "AGI 2035",
-			caption: "Comic book article design and development",
+			caption: "How will AI change your life in 2035?",
 		},
 		{
 			id: 5,
@@ -229,7 +236,7 @@
 			src: asset("ukraine-skateboarding.mp4"),
 			poster: asset("ukraine-skateboarding-poster.webp"),
 			title: "Ukraine Skateboarding",
-			caption: "Photoessay design and development",
+			caption: "Photoessay exploring Ukraine's skateboarding culture",
 		},
 		{
 			id: 6,
@@ -240,27 +247,27 @@
 					type: "video",
 					src: asset("okinawa-1.mp4"),
 					poster: asset("okinawa-1-poster.webp"),
-					caption: "Opening sequence",
+					caption: "Okinawa",
 				},
 				{
 					type: "image",
 					src: asset("okinawa-2.webp"),
-					caption: "Chapter title",
+					caption: " ",
 				},
 				{
 					type: "image",
 					src: asset("okinawa-3.webp"),
-					caption: "Body text layout",
+					caption: " ",
 				},
 				{
 					type: "image",
 					src: asset("okinawa-4.webp"),
-					caption: "Photo essay spread",
+					caption: " ",
 				},
 				{
 					type: "image",
 					src: asset("okinawa-5.webp"),
-					caption: "Pull quote design",
+					caption: " ",
 				},
 			],
 			title: "Okinawa: The bone hunter",
@@ -311,7 +318,8 @@
 			src: asset("press-vest.mp4"),
 			poster: asset("press-vest-poster.webp"),
 			title: "The deadly toll on journalists in the Gaza war",
-			caption: "Motion and art direction, The Guardian",
+			caption:
+				"Art direction for a piece on the deadly toll on journalists in Gaza",
 		},
 		{
 			id: 9,
@@ -320,7 +328,7 @@
 			type: "image",
 			src: asset("carbon-bombs-world.webp"),
 			title: "Carbon bombs",
-			caption: "Data visualisation and illustration, The Guardian",
+			caption: "Carbon bombs artwork",
 		},
 		{
 			id: 10,

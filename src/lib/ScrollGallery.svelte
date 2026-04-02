@@ -470,10 +470,16 @@
 						// Add CSS class directly to element
 						entry.target.classList.add("in-view");
 
-						// Play only non-carousel videos when the item is in view
+						// Eagerly load all carousel images so they're ready before the user swipes
+						entry.target.querySelectorAll(".carousel img[loading='lazy']").forEach((img) => {
+							img.loading = "eager";
+						});
+
+						// Play only non-carousel, muted videos when the item is in view
 						const videos = entry.target.querySelectorAll("video");
 						videos.forEach((video) => {
 							if (video.closest(".carousel")) return;
+							if (!video.muted) return;
 							tryPlayVideo(video);
 						});
 
@@ -546,6 +552,7 @@
 						const itemVisible = itemId !== null && visibleItems.has(itemId);
 
 						if (entry.isIntersecting && itemVisible) {
+							if (!video.muted) return; // hasAudio videos use native controls
 							// On desktop the viewport is wide enough that adjacent slides are
 							// also visible, so guard against playing a non-current slide.
 							const carouselState =
@@ -664,11 +671,12 @@
 															on:loadedmetadata={(event) =>
 																setMediaOrientation(mediaItem.src, event)}
 															loop
-															muted
+															muted={!mediaItem.hasAudio}
+															controls={mediaItem.hasAudio || undefined}
 															playsinline
 															preload="metadata"
 														></video>
-														{#if blockedVideos.has(mediaItem.src)}
+														{#if !mediaItem.hasAudio && blockedVideos.has(mediaItem.src)}
 															<button
 																class="play-button"
 																type="button"
@@ -744,11 +752,12 @@
 											on:loadedmetadata={(event) =>
 												setMediaOrientation(item.src, event)}
 											loop
-											muted
+											muted={!item.hasAudio}
+											controls={item.hasAudio || undefined}
 											playsinline
 											preload="metadata"
 										></video>
-										{#if blockedVideos.has(item.src)}
+										{#if !item.hasAudio && blockedVideos.has(item.src)}
 											<button
 												class="play-button"
 												type="button"
