@@ -669,14 +669,22 @@
 															preload="metadata"
 														></video>
 														{#if blockedVideos.has(mediaItem.src)}
-															<button class="play-button" type="button" aria-label="Play video"
+															<button
+																class="play-button"
+																type="button"
+																aria-label="Play video"
 																on:click={(e) => {
-																	const v = e.currentTarget.closest(".video-wrapper").querySelector("video");
+																	const v = e.currentTarget
+																		.closest(".video-wrapper")
+																		.querySelector("video");
 																	v.play();
 																	blockedVideos.delete(mediaItem.src);
 																	blockedVideos = blockedVideos;
-																}}>
-																<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+																}}
+															>
+																<svg viewBox="0 0 24 24" fill="currentColor"
+																	><path d="M8 5v14l11-7z" /></svg
+																>
 															</button>
 														{/if}
 													</div>
@@ -741,14 +749,22 @@
 											preload="metadata"
 										></video>
 										{#if blockedVideos.has(item.src)}
-											<button class="play-button" type="button" aria-label="Play video"
+											<button
+												class="play-button"
+												type="button"
+												aria-label="Play video"
 												on:click={(e) => {
-													const v = e.currentTarget.closest(".video-wrapper").querySelector("video");
+													const v = e.currentTarget
+														.closest(".video-wrapper")
+														.querySelector("video");
 													v.play();
 													blockedVideos.delete(item.src);
 													blockedVideos = blockedVideos;
-												}}>
-												<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+												}}
+											>
+												<svg viewBox="0 0 24 24" fill="currentColor"
+													><path d="M8 5v14l11-7z" /></svg
+												>
 											</button>
 										{/if}
 									</div>
@@ -786,64 +802,14 @@
 		</div>
 	</div>
 
-	<!-- Info Overlay Button -->
-	<!-- <button
-		class="info-button"
-		class:open={infoOverlayOpen}
-		on:click={toggleInfoOverlay}
-		aria-label="Toggle info overlay"
-	>
-		<span class="plus-icon"></span>
-	</button> -->
-
-	<!-- Info Overlay -->
-	<!-- <div class="info-overlay" bind:this={infoOverlay}>
-		<div class="overlay-content">
-			<p>
-				Harry Fischer began his career at WCRS, a leading advertising agency,
-				working across a range of high-profile brands including the RAF, Sky,
-				NOW TV, and Born Free. From there, he moved into digital design, taking
-				on briefs for Costa and leading the redesign of the RAF's recruitment
-				website. It was during this period that he taught himself to code — a
-				skill that has proven invaluable ever since, allowing him to bridge the
-				gap between design and engineering and hold informed, confident
-				conversations across both disciplines.
-			</p>
-			<p>
-				He then joined a digital design agency where he deepened his UX
-				expertise, working on projects ranging from a tool to track dolphin
-				movements along the UK's south coast to internal incident management
-				platforms for enterprise clients.
-			</p>
-			<div>
-				<small>Awards & recognition</small>
-				<small>
-					<span>Cotton Capital,</span><br />The Guardian: D&AD, Wooden Pencil
-					Magazine design | Type Directors Club, Winner | ISTD, Cerificate of
-					Excellence | Design Week, Social Design Winner
-				</small>
-				<small>
-					<span>UK and US Elections 2024,</span><br />The Guardian: D&AD, Wooden
-					Pencil | SND, Award of Excellence | SPD, Medal Finalist
-				</small>
-				<small>
-					<span>The Black Panther Cubs,</span><br />The Guardian: Grierson, Long
-					listed
-				</small>
-			</div>
-		</div>
-	</div> -->
-
 	<!-- Contact Box -->
 	<div class="contact-box">
 		<div class="contact-content">
-			<div class="contact-label" style="color: var(--text-color)">
-				Get in touch — open to commissions
-			</div>
+			<div class="contact-label">Get in touch — open to commissions</div>
 			<button
 				bind:this={contactEmailButton}
 				class="contact-email"
-				style="color: var(--text-color); width: {buttonWidth};"
+				style="width: {buttonWidth};"
 				on:click={() => copyToClipboard("harry.j.fischer@gmail.com")}
 				title="Click to copy email"
 			>
@@ -858,7 +824,6 @@
 				target="_blank"
 				rel="noopener noreferrer"
 				class="contact-instagram"
-				style="color: var(--text-color)"
 			>
 				@harrryfischer
 			</a>

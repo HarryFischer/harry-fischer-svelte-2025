@@ -15,33 +15,34 @@
 			backgroundColor: "#3399FF",
 			textColor: "#fff",
 			media: [
-				{
-					type: "image",
-					src: asset("cubs-0.webp"),
-					caption:
-						"The Black Panther Cubs — When The Revolution Doesn't Come, The Guardian",
-				},
+				// {
+				// 	type: "image",
+				// 	src: asset("cubs-0.webp"),
+				// 	caption:
+				// 		"The Black Panther Cubs — When The Revolution Doesn't Come, The Guardian",
+				// },
 				{
 					type: "video",
 					src: asset("cubs-titles.mp4"),
 					poster: asset("cubs-titles-poster.webp"),
-					caption: "Opening titles sequence",
+					caption:
+						"The Black Panther Cubs — When The Revolution Doesn't Come titles",
 				},
 				{
 					type: "video",
 					src: asset("cubs-credits.mp4"),
 					poster: asset("cubs-credits-poster.webp"),
-					caption: "End credits sequence",
+					caption: "Thirds / credits",
 				},
-				{
-					type: "image",
-					src: asset("Cubs-1.webp"),
-					caption: "Article design and development",
-				},
+				// {
+				// 	type: "image",
+				// 	src: asset("Cubs-1.webp"),
+				// 	caption: "Article design and development",
+				// },
 				{
 					type: "image",
 					src: asset("cubs-poster.webp"),
-					caption: "Doc poster",
+					caption: "Poster",
 				},
 			],
 			title: "The Black Panther Cubs — When The Revolution Doesn't Come",
@@ -61,45 +62,55 @@
 					src: asset("bedside-back.webp"),
 					caption: " ",
 				},
-				{
-					type: "image",
-					src: asset("bedside-3.webp"),
-					caption: " ",
-				},
+				// {
+				// 	type: "image",
+				// 	src: asset("bedside-3.webp"),
+				// 	caption: " ",
+				// },
 			],
 			title: "The Bedside Guardian 2025",
 		},
-
 		{
 			id: 11,
 			backgroundColor: "#2C2C26",
 			textColor: "#fff",
-			media: [
-				{
-					type: "video",
-					src: asset("cub-sans-vid.mp4"),
-					poster: asset("cub-sans-vid-poster.webp"),
-					caption: "Cub Sans, a new display typeface for The Guardian",
-				},
-				{
-					type: "image",
-					src: asset("cub-sans-char-1.webp"),
-					caption: " ",
-				},
-				{
-					type: "image",
-					src: asset("cub-sans-char-2.webp"),
-					caption: " ",
-				},
-				{
-					type: "video",
-					src: asset("cub-sans-website.mp4"),
-					poster: asset("cub-sans-website-poster.webp"),
-					caption: "Specimen website design.theguardian.com/cub-sans",
-				},
-			],
+			type: "video",
+			src: asset("cub-sans-website.mp4"),
+			poster: asset("cub-sans-website-poster.webp"),
 			title: "Guardian Cub Sans",
+			caption:
+				"Cub Sans, a new display typeface for The Guardian: design.theguardian.com/cub-sans",
 		},
+		// {
+		// 	id: 11,
+		// 	backgroundColor: "#2C2C26",
+		// 	textColor: "#fff",
+		// 	media: [
+		// 		{
+		// 			type: "video",
+		// 			src: asset("cub-sans-vid.mp4"),
+		// 			poster: asset("cub-sans-vid-poster.webp"),
+		// 			caption: "Cub Sans, a new display typeface for The Guardian",
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("cub-sans-char-1.webp"),
+		// 			caption: " ",
+		// 		},
+		// 		{
+		// 			type: "image",
+		// 			src: asset("cub-sans-char-2.webp"),
+		// 			caption: " ",
+		// 		},
+		// 		{
+		// 			type: "video",
+		// 			src: asset("cub-sans-website.mp4"),
+		// 			poster: asset("cub-sans-website-poster.webp"),
+		// 			caption: "Specimen website design.theguardian.com/cub-sans",
+		// 		},
+		// 	],
+		// 	title: "Guardian Cub Sans",
+		// },
 		{
 			id: 4,
 			backgroundColor: "#2B503C",
@@ -315,19 +326,10 @@
 			id: 10,
 			backgroundColor: "#2C2C26",
 			textColor: "#fff",
-			media: [
-				{
-					type: "image",
-					src: asset("fedrigoni-cal.webp"),
-					caption: "Calendar spread",
-				},
-				{
-					type: "image",
-					src: asset("fedrigoni.webp"),
-					caption: "Paper stock detail",
-				},
-			],
+			type: "image",
+			src: asset("fedrigoni-cal.webp"),
 			title: "Fedrigoni Calendar 2025",
+			caption: "Fedrigoni Calendar 2025",
 		},
 	];
 
