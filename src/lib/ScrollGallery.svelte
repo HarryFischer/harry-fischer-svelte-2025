@@ -676,7 +676,7 @@
 															playsinline
 															preload="metadata"
 														></video>
-														{#if !mediaItem.hasAudio && blockedVideos.has(mediaItem.src)}
+														{#if blockedVideos.has(mediaItem.src)}
 															<button
 																class="play-button"
 																type="button"
@@ -757,7 +757,7 @@
 											playsinline
 											preload="metadata"
 										></video>
-										{#if !item.hasAudio && blockedVideos.has(item.src)}
+										{#if blockedVideos.has(item.src)}
 											<button
 												class="play-button"
 												type="button"
