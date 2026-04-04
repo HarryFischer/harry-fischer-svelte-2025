@@ -1,9 +1,5 @@
 <script>
-	import { hasContext, onMount } from "svelte";
 	import ScrollGallery from "./lib/ScrollGallery.svelte";
-
-	let isLoading = true;
-	let isFading = false;
 
 	// Use Vite's BASE_URL to construct proper asset paths for GitHub Pages
 	const baseUrl = import.meta.env.BASE_URL;
@@ -117,9 +113,14 @@
 			textColor: "#fff",
 			media: [
 				{
+					type: "video",
+					src: asset("election-showreel-compressed.mp4"),
+					caption: "UK Election 2024",
+				},
+				{
 					type: "image",
 					src: asset("elec-artwork-1.webp"),
-					caption: "Election artwork",
+					caption: " ",
 				},
 				{
 					type: "image",
@@ -340,37 +341,7 @@
 			caption: "Fedrigoni Calendar 2025",
 		},
 	];
-
-	const finishLoading = () => {
-		if (!isLoading) return;
-		isFading = true;
-		setTimeout(() => {
-			isLoading = false;
-		}, 300);
-	};
-
-	onMount(() => {
-		if (document.readyState === "complete") {
-			finishLoading();
-			return;
-		}
-
-		const handleLoad = () => {
-			finishLoading();
-		};
-
-		window.addEventListener("load", handleLoad, { once: true });
-		return () => window.removeEventListener("load", handleLoad);
-	});
 </script>
-
-{#if isLoading}
-	<div class="loading-screen" class:is-fading={isFading} aria-live="polite">
-		<div class="loading-text">
-			Loading<span class="loading-dots" aria-hidden="true"></span>
-		</div>
-	</div>
-{/if}
 
 <ScrollGallery {items} />
 

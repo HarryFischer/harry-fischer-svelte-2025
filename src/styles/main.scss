@@ -69,50 +69,6 @@ html {
 	// text-align: center;
 }
 
-.loading-screen {
-	position: fixed;
-	inset: 0;
-	display: flex;
-	align-items: flex-start;
-	justify-content: flex-start;
-	background: #fff;
-	color: #111;
-	padding: 28px 22px;
-	z-index: 1000;
-	opacity: 1;
-	transition: opacity 0.3s ease;
-}
-
-.loading-screen.is-fading {
-	opacity: 0;
-	pointer-events: none;
-}
-
-.loading-text {
-	font-size: clamp(1.4rem, 2.2vw, 2.3rem);
-	letter-spacing: -0.015em;
-	align-items: center;
-	justify-content: center;
-}
-
-.loading-dots::after {
-	content: "...";
-	display: inline-block;
-	width: 0ch;
-	overflow: hidden;
-	vertical-align: bottom;
-	animation: loading-dots 1s steps(3, end) infinite;
-}
-
-@keyframes loading-dots {
-	0% {
-		width: 0ch;
-	}
-	100% {
-		width: 3ch;
-	}
-}
-
 button {
 	border-radius: 8px;
 	border: 1px solid transparent;
