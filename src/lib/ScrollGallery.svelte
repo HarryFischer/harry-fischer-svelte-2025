@@ -178,12 +178,9 @@
 	};
 
 	const tryPlayVideo = (video) => {
-		video.play().catch(() => {});
-		setTimeout(() => {
-			if (video.paused) {
-				blockedVideos = new Set([...blockedVideos, video.src]);
-			}
-		}, 1000);
+		video.play().catch(() => {
+			blockedVideos = new Set([...blockedVideos, video.src]);
+		});
 	};
 
 	const playCarouselVideoAtIndex = (carouselNode, state) => {

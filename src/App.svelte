@@ -116,6 +116,7 @@
 					hasAudio: true,
 					type: "video",
 					src: asset("election-showreel-compressed.mp4"),
+					poster: asset("election-showreel-compressed-poster.webp"),
 					caption: "UK Election 2024",
 				},
 				{
@@ -145,6 +146,34 @@
 				},
 			],
 			title: "UK and US Elections artwork",
+		},
+		{
+			id: 13,
+			backgroundColor: "#1a1a1a",
+			textColor: "#fff",
+			media: [
+				{
+					type: "video",
+					hasAudio: true,
+					src: asset("230319_Cotton-Capital-V3.mp4"),
+					poster: asset("230319_Cotton-Capital-V3-poster.webp"),
+					caption:
+						"Cotton Capital: how slavery changed the Guardian, Britain and the world, The Guardian",
+				},
+				{
+					type: "image",
+					src: asset("cc-weave-close.webp"),
+					caption: "Weave detail",
+				},
+				{
+					type: "video",
+					hasAudio: false,
+					src: asset("weave-cc.mp4"),
+					poster: asset("weave-cc-poster.webp"),
+					caption: " ",
+				},
+			],
+			title: "Cotton Capital — the weave",
 		},
 		{
 			id: 12,
@@ -194,41 +223,34 @@
 			],
 			title: "UK and US Elections UI",
 		},
+
 		{
-			id: 13,
-			backgroundColor: "#1a1a1a",
+			id: 1,
+			backgroundColor: "#B7B7B7",
 			textColor: "#fff",
 			media: [
 				{
 					type: "video",
-					hasAudio: true,
-					src: asset("230319_Cotton-Capital-V3.mp4"),
-					caption:
-						"Cotton Capital: how slavery changed the Guardian, Britain and the world, The Guardian",
+					src: asset("2035-agi.mp4"),
+					poster: asset("agi-2035-poster.webp"),
+					caption: "How will AI change your life in 2035?",
 				},
 				{
 					type: "image",
-					src: asset("cc-weave-close.webp"),
-					caption: "Weave detail",
+					src: asset("jay-1.webp"),
+					caption: "Commissioned comic strips by Jay Cover",
 				},
 				{
-					type: "video",
-					hasAudio: false,
-					src: asset("weave-cc.mp4"),
+					type: "image",
+					src: asset("jay-2.webp"),
+					caption: " ",
+				},
+				{
+					type: "image",
+					src: asset("jay-3.webp"),
 					caption: " ",
 				},
 			],
-			title: "Cotton Capital — the weave",
-		},
-		{
-			id: 1,
-			backgroundColor: "#B7B7B7",
-			textColor: "#000",
-			type: "video",
-			src: asset("2035-agi.mp4"),
-			poster: asset("agi-2035-poster.webp"),
-			title: "AGI 2035",
-			caption: "How will AI change your life in 2035?",
 		},
 		{
 			id: 5,
@@ -246,15 +268,20 @@
 			textColor: "#fff",
 			media: [
 				{
+					type: "image",
+					src: asset("okinawa-poster-cropped.webp"),
+					caption: "Okinawa documentary film poster",
+				},
+				{
 					type: "video",
 					src: asset("okinawa-1.mp4"),
 					poster: asset("okinawa-1-poster.webp"),
-					caption: "Okinawa",
+					caption: "Mud type",
 				},
 				{
 					type: "image",
 					src: asset("okinawa-2.webp"),
-					caption: " ",
+					caption: "Titles, thirds and credits",
 				},
 				{
 					type: "image",
@@ -269,6 +296,11 @@
 				{
 					type: "image",
 					src: asset("okinawa-5.webp"),
+					caption: " ",
+				},
+				{
+					type: "image",
+					src: asset("okinawa-alt-poster.webp"),
 					caption: " ",
 				},
 			],
