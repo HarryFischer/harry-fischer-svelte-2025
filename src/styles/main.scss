@@ -86,6 +86,8 @@ button {
 }
 
 .gallery-wrapper {
+	--bg-color: #ffffff;
+	--text-color: #000;
 	width: 100vw;
 	height: 100vh;
 	display: flex;
@@ -363,8 +365,8 @@ button {
 					margin: 10px 0 0 0;
 					text-align: center;
 					color: var(--text-color);
+					padding-top: 8px;
 					@include mq.mq($from: desktop) {
-						padding-top: 8px;
 						font-size: 17px;
 					}
 				}
@@ -625,5 +627,39 @@ button:focus-visible {
 	}
 	&:hover {
 		opacity: 0.7;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.scroll-container .scroll-content .gallery-item {
+		img,
+		video {
+			transform: scale(1) !important;
+			transition: none !important;
+		}
+
+		.item-content figure figcaption,
+		.carousel-slide figcaption {
+			opacity: 1 !important;
+			transition: none !important;
+		}
+
+		.carousel-pagination {
+			opacity: 1 !important;
+			transition: none !important;
+		}
+
+		.carousel-dot {
+			transition: none !important;
+		}
+	}
+
+	.background-text {
+		transition: none !important;
+	}
+
+	.contact-email,
+	.contact-instagram {
+		transition: none !important;
 	}
 }

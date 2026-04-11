@@ -11,8 +11,6 @@
 	let infoOverlay;
 	let contactEmailButton;
 	let buttonWidth = "auto";
-	let backgroundColor = "#ffffff";
-	let textColor = "#000";
 	let shouldBlurBackground = false;
 	let visibleItems = new Set();
 	let infoOverlayOpen = false;
@@ -69,13 +67,21 @@
 
 	const updateColors = (newBgColor, newTextColor) => {
 		if (galleryWrapper) {
-			gsap.to(galleryWrapper, {
-				"--bg-color": newBgColor,
-				"--text-color": newTextColor,
-				duration: 0.6,
-				ease: "power2.out",
-				immediateRender: true,
-			});
+			const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+			if (prefersReducedMotion) {
+				gsap.set(galleryWrapper, {
+					"--bg-color": newBgColor,
+					"--text-color": newTextColor,
+				});
+			} else {
+				gsap.to(galleryWrapper, {
+					"--bg-color": newBgColor,
+					"--text-color": newTextColor,
+					duration: 0.6,
+					ease: "power2.out",
+					immediateRender: true,
+				});
+			}
 		}
 	};
 
@@ -415,8 +421,8 @@
 		updateViewportMode();
 		window.addEventListener("resize", updateViewportMode);
 
-		backgroundColor = "#ffffff";
-		textColor = "#000";
+		// Initialize CSS vars (not set via Svelte style binding — GSAP owns these)
+		gsap.set(galleryWrapper, { "--bg-color": "#ffffff", "--text-color": "#000" });
 
 		// Wait for fonts to load before measuring the button width
 		if (document.fonts) {
@@ -491,14 +497,10 @@
 
 						// Update background color and text color when item comes into view
 						if (isEdgeItem) {
-							backgroundColor = "#ffffff";
-							textColor = "#000";
 							updateColors("#ffffff", "#000");
 						} else {
 							const item = items.find((i) => i.id === itemId);
 							if (item) {
-								backgroundColor = item.backgroundColor;
-								textColor = item.textColor || "#000";
 								updateColors(item.backgroundColor, item.textColor || "#000");
 							}
 						}
@@ -589,8 +591,6 @@
 
 		const onScroll = () => {
 			if (scrollContainer.scrollTop < 50) {
-				backgroundColor = "#ffffff";
-				textColor = "#000";
 				updateColors("#ffffff", "#000");
 			}
 		};
@@ -610,7 +610,6 @@
 <div
 	bind:this={galleryWrapper}
 	class="gallery-wrapper"
-	style="--bg-color: {backgroundColor}; --text-color: {textColor};"
 >
 	<div
 		class="background-text"
