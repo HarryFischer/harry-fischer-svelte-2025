@@ -113,6 +113,7 @@
 			textColor: "#fff",
 			media: [
 				{
+					hasAudio: true,
 					type: "video",
 					src: asset("election-showreel-compressed.mp4"),
 					caption: "UK Election 2024",
